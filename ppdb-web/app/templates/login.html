@@ -1,191 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Sistem PPDB Online</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Login PPDB</title>
     <style>
-        :root {
-            --primary-color: #2563eb;
-            --secondary-color: #1e40af;
-            --accent-color: #3b82f6;
-            --background-color: #f0f9ff;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
         body {
-            background: var(--background-color);
-            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
-        .container {
-            width: 100%;
-            max-width: 450px;
-            padding: 20px;
-        }
-
-        .screen {
+        .login-box {
             background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .logo {
-            width: 120px;
-            height: auto;
-            margin-bottom: 20px;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        h2 {
-            color: var(--secondary-color);
-            margin-bottom: 10px;
-            font-size: 24px;
-        }
-
-        .subtitle {
-            color: #64748b;
-            margin-bottom: 5px;
-            font-size: 16px;
-        }
-
-        .tahun-ajaran {
-            color: var(--primary-color);
-            font-weight: 600;
-            margin-bottom: 30px;
-        }
-
-        .login__field {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .login__icon {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #94a3b8;
-        }
-
-        .login__input {
-            width: 100%;
-            padding: 15px 15px 15px 45px;
-            border: 2px solid #e2e8f0;
+            padding: 30px 40px;
             border-radius: 10px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .login__input:focus {
-            border-color: var(--accent-color);
-            outline: none;
-        }
-
-        .login__submit {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             width: 100%;
-            padding: 15px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            max-width: 400px;
         }
 
-        .login__submit:hover {
-            background: var(--secondary-color);
-        }
-
-        .register-text {
+        .login-box h2 {
             text-align: center;
-            margin-top: 20px;
-            color: #64748b;
+            margin-bottom: 25px;
+            color: #333;
         }
 
-        .register-text a {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .register-text a:hover {
-            text-decoration: underline;
-        }
-
-        .help-text {
-            margin-top: 30px;
-            text-align: center;
-            color: #64748b;
+        .login-box input[type="text"],
+        .login-box input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
             font-size: 14px;
         }
 
-        .help-text p {
-            margin-bottom: 5px;
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
         }
 
-        .help-text i {
-            color: var(--primary-color);
-            margin-right: 8px;
+        .login-box button:hover {
+            background-color: #218838;
+        }
+
+        .login-box .register-link {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .login-box .register-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .login-box .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .flash-message {
+            color: red;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="screen">
-            <div class="login">
-                <div class="login__field text-center">
-                    <img src="{{ url_for('static', filename='logo-sekolah.png') }}" alt="Logo Sekolah" class="logo">
-                    <h2>Selamat Datang di PPDB Online</h2>
-                    <p class="subtitle">SMA/SMK Example School</p>
-                    <p class="tahun-ajaran">Tahun Ajaran 2024/2025</p>
-                </div>
-                <form class="login-form" action="{{ url_for('auth_bp.login') }}" method="POST">
-                    <div class="login__field">
-                        <i class="login__icon fas fa-user"></i>
-                        <input type="text" class="login__input" id="username" name="username" 
-                               placeholder="Nomor Pendaftaran/Username" required>
-                    </div>
-                    <div class="login__field">
-                        <i class="login__icon fas fa-lock"></i>
-                        <input type="password" class="login__input" id="password" name="password" 
-                               placeholder="Password" required>
-                    </div>
-                    <button class="login__submit">
-                        <span>Masuk</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </button>       
-                </form>
-                <div class="register-text">
-                    <p>Belum memiliki akun? <a href="{{ url_for('auth_bp.register') }}">Daftar Sekarang</a></p>
-                </div>
-                <div class="help-text">
-                    <p>Butuh bantuan? Hubungi kami di:</p>
-                    <p><i class="fas fa-phone"></i> (021) 1234567</p>
-                    <p><i class="fas fa-envelope"></i> ppdb@example-school.edu</p>
-                </div>
-            </div>
+
+    <div class="login-box">
+        <h2>Login PPDB</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="flash-message">{{ message }}</div>
+              <a href="{{ url_for('auth_bp.register') }}">Daftar</a>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Masuk</button>
+        </form>
+
+        <div class="register-link">
+            Belum punya akun? <a href="{{ url_for('auth_bp.register') }}">Daftar</a>
         </div>
     </div>
+
 </body>
 </html>

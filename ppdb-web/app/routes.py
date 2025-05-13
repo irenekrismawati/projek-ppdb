@@ -8,6 +8,10 @@ from . import db
 main_bp = Blueprint('main', __name__)
 auth_bp = Blueprint('auth', __name__)
 
+def my_function():
+    print("Hello")
+    print("World")  # Indentasi konsisten
+    
 # Route utama
 @main_bp.route('/')
 def index():
