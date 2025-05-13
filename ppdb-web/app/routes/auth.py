@@ -30,29 +30,43 @@ def login():
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = request.form.get('username')
-        email = request.form.get('email')  # <- Pastikan ini tidak None
-        password = request.form.get('password')
-        name = request.form.get('name')
+        try:
+            email = request.form.get('email')
+            username = request.form.get('username')
+            password = request.form.get('password')
+            name = request.form.get('name')
 
-        # Tambahkan validasi
-        if not email or not username or not password:
-            flash("Semua field wajib diisi!", "danger")
-            return redirect(url_for('register'))
+            # Cek email sudah terdaftar atau belum
+            existing_user = User.query.filter_by(email=email).first()
+            if existing_user:
+                flash('Email sudah terdaftar! Silakan gunakan email lain.', 'error')
+                return render_template('register.html')
 
-        hashed_password = generate_password_hash(password)
+            # Cek username sudah digunakan atau belum    
+            existing_username = User.query.filter_by(username=username).first()
+            if existing_username:
+                flash('Username sudah digunakan! Silakan pilih username lain.', 'error')
+                return render_template('register.html')
 
-        user = User(
-            username=username,
-            email=email,
-            password=hashed_password,
-            name=name
-        )
-        db.session.add(user)
-        db.session.commit()
-        flash("Pendaftaran berhasil", "success")
-        return redirect(url_for('login'))
+            # Buat user baru
+            new_user = User(
+                email=email,
+                username=username,
+                password=generate_password_hash(password),
+                name=name
+            )
 
+            db.session.add(new_user)
+            db.session.commit()
+            
+            flash('Registrasi berhasil! Silakan login.', 'success')
+            return redirect(url_for('auth_bp.login'))
+
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error saat registrasi: {str(e)}")
+            flash('Terjadi kesalahan saat registrasi.', 'error')
+            
     return render_template('register.html')
 
 # -------- LOGOUT --------
