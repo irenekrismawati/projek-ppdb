@@ -31,20 +31,27 @@ def login():
 def register():
     if request.method == 'POST':
         username = request.form.get('username')
+        email = request.form.get('email')  # <- Pastikan ini tidak None
         password = request.form.get('password')
+        name = request.form.get('name')
 
-        if User.query.filter_by(username=username).first():
-            flash('Username sudah terdaftar.', 'warning')
-            return redirect(url_for('auth_bp.register'))
+        # Tambahkan validasi
+        if not email or not username or not password:
+            flash("Semua field wajib diisi!", "danger")
+            return redirect(url_for('register'))
 
         hashed_password = generate_password_hash(password)
-        user = User(username=username, password=hashed_password)
 
+        user = User(
+            username=username,
+            email=email,
+            password=hashed_password,
+            name=name
+        )
         db.session.add(user)
         db.session.commit()
-
-        flash('Registrasi berhasil! Silakan login.', 'success')
-        return redirect(url_for('auth_bp.login'))
+        flash("Pendaftaran berhasil", "success")
+        return redirect(url_for('login'))
 
     return render_template('register.html')
 
