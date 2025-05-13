@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
-from .forms import RegistrationForm
 from .models import Student, User
 from . import db
 
@@ -15,26 +14,6 @@ def index():
     return render_template('index.html')
 
 # Route registrasi siswa
-@main_bp.route('/register-student', methods=['GET', 'POST'])
-@login_required
-def register_student():
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        try:
-            student = Student(
-                name=form.name.data,
-                email=form.email.data,
-                # Tambahkan field lainnya
-            )
-            db.session.add(student)
-            db.session.commit()
-            flash('Pendaftaran siswa berhasil!', 'success')
-            return redirect(url_for('main.index'))
-        except Exception as e:
-            db.session.rollback()
-            flash('Pendaftaran siswa gagal!', 'error')
-            print(f"Error: {str(e)}")
-    return render_template('register_student.html', form=form)
 
 # Route registrasi user/akun
 @auth_bp.route('/register', methods=['GET', 'POST'])
