@@ -6,7 +6,6 @@
     <title>PPDB Web</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <style>
-        /* Gaya dasar */
         body {
             font-family: 'Segoe UI', sans-serif;
             margin: 0;
@@ -53,10 +52,24 @@
         section {
             background: white;
             max-width: 800px;
-            margin: 0 auto;
+            margin: 0 auto 20px;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-box {
+            background: #e9f5ff;
+            border-left: 6px solid #007BFF;
+            text-align: left;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+        }
+
+        .info-box h3 {
+            margin-top: 0;
+            color: #007BFF;
         }
 
         footer {
@@ -87,6 +100,19 @@
     </header>
 
     <main>
+        <!-- Petunjuk Pendaftaran -->
+        <section class="info-box">
+            <h3>Cara Pendaftaran PPDB</h3>
+            <ol>
+                <li><strong>Daftar Akun:</strong> Klik menu "Daftar" dan isi formulir registrasi untuk membuat akun.</li>
+                <li><strong>Login:</strong> Setelah berhasil daftar, masuk ke sistem menggunakan email dan password Anda.</li>
+                <li><strong>Isi Formulir:</strong> Lengkapi formulir pendaftaran dengan data diri dan dokumen yang diminta.</li>
+                <li><strong>Kirim Formulir:</strong> Periksa kembali semua data, lalu klik "Kirim" untuk menyelesaikan pendaftaran.</li>
+            </ol>
+            <p>Pastikan semua informasi sudah benar dan lengkap sebelum mengirim formulir.</p>
+        </section>
+
+        <!-- Informasi tambahan -->
         <section>
             <h2>Informasi Penerimaan Peserta Didik Baru</h2>
             <p>Selamat datang di portal resmi PPDB sekolah kami. Silakan gunakan menu di atas untuk mendaftar atau melihat informasi lebih lanjut.</p>
