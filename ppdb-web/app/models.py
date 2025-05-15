@@ -25,3 +25,4 @@ class Pendaftaran(db.Model):
     nama = db.Column(db.String(100), nullable=False)
     sekolah_id = db.Column(db.Integer, db.ForeignKey('sekolah.id'), nullable=False)
     nilai = db.Column(db.Float, nullable=True)
+

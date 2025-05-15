@@ -7,13 +7,16 @@ main_bp = Blueprint('main_bp', __name__)
 # -------- Halaman Utama (Publik) --------
 @main_bp.route("/", methods=['GET', 'POST'])
 def index():
+    return render_template("index.html")
+
+@main_bp.route('/daftar', methods=['GET', 'POST'])
+def daftar():
     if request.method == 'POST':
-        # Ambil data dari form pendaftaran singkat di index.html
         nama = request.form.get('nama')
         asal_sekolah = request.form.get('asal_sekolah')
         no_hp = request.form.get('no_hp')
         pilihan_jurusan = request.form.get('pilihan_jurusan')
-        # Simpan ke database jika model Pendaftaran sesuai
+        # Tambahkan validasi jika perlu
         if nama and asal_sekolah and no_hp and pilihan_jurusan:
             pendaftaran = Pendaftaran(
                 nama=nama,
@@ -26,8 +29,8 @@ def index():
             flash('Pendaftaran berhasil! Kami akan menghubungi Anda.', 'success')
         else:
             flash('Semua field harus diisi!', 'error')
-        return redirect(url_for('main_bp.index'))
-    return render_template("index.html")
+        return redirect(url_for('main_bp.daftar'))
+    return render_template('daftar.html')
 
 # -------- Dashboard User (Harus Login) --------
 @main_bp.route('/dashboard')
@@ -36,12 +39,3 @@ def dashboard():
     # Ambil daftar pendaftaran yang terkait dengan user yang sedang login
     pendaftarans = Pendaftaran.query.filter_by(user_id=current_user.id).all()
     return render_template("dashboard.html", current_user=current_user, pendaftarans=pendaftarans)
-
-# -------- Halaman Detail Pendaftaran --------
-@main_bp.route('/daftar', methods=['GET', 'POST'])
-def daftar():
-    if request.method == 'POST':
-        # proses data pendaftaran
-        ...
-        return redirect(url_for('main_bp.daftar'))
-    return render_template('daftar.html')
