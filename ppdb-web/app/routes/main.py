@@ -1,12 +1,32 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from app.models import db, Pendaftaran, Sekolah
 
 main_bp = Blueprint('main_bp', __name__)
 
 # -------- Halaman Utama (Publik) --------
-@main_bp.route("/")
+@main_bp.route("/", methods=['GET', 'POST'])
 def index():
+    if request.method == 'POST':
+        # Ambil data dari form pendaftaran singkat di index.html
+        nama = request.form.get('nama')
+        asal_sekolah = request.form.get('asal_sekolah')
+        no_hp = request.form.get('no_hp')
+        pilihan_jurusan = request.form.get('pilihan_jurusan')
+        # Simpan ke database jika model Pendaftaran sesuai
+        if nama and asal_sekolah and no_hp and pilihan_jurusan:
+            pendaftaran = Pendaftaran(
+                nama=nama,
+                asal_sekolah=asal_sekolah,
+                no_hp=no_hp,
+                pilihan_jurusan=pilihan_jurusan
+            )
+            db.session.add(pendaftaran)
+            db.session.commit()
+            flash('Pendaftaran berhasil! Kami akan menghubungi Anda.', 'success')
+        else:
+            flash('Semua field harus diisi!', 'error')
+        return redirect(url_for('main_bp.index'))
     return render_template("index.html")
 
 # -------- Dashboard User (Harus Login) --------
@@ -18,11 +38,10 @@ def dashboard():
     return render_template("dashboard.html", current_user=current_user, pendaftarans=pendaftarans)
 
 # -------- Halaman Detail Pendaftaran --------
-@main_bp.route('/pendaftaran/<int:pendaftaran_id>')
-@login_required
-def view_pendaftaran(pendaftaran_id):
-    # Ambil data pendaftaran tertentu berdasarkan ID
-    pendaftaran = Pendaftaran.query.get_or_404(pendaftaran_id)
-    # Ambil data sekolah terkait pendaftaran
-    sekolah = Sekolah.query.get(pendaftaran.sekolah_id)
-    return render_template("detail_pendaftaran.html", pendaftaran=pendaftaran, sekolah=sekolah)
+@main_bp.route('/daftar', methods=['GET', 'POST'])
+def daftar():
+    if request.method == 'POST':
+        # proses data pendaftaran
+        ...
+        return redirect(url_for('main_bp.daftar'))
+    return render_template('daftar.html')

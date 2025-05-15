@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulir Pendaftaran PPDB</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #71b7e6, #9b59b6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+        }
+        .container {
+            background: #fff;
+            padding: 36px 32px 28px 32px;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            color: #4285f4;
+            text-align: center;
+            margin-bottom: 28px;
+            font-size: 26px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+            position: relative;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            color: #555;
+            font-weight: 500;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: #4285f4;
+            outline: none;
+        }
+        .form-group i {
+            position: absolute;
+            left: 12px;
+            top: 38px;
+            color: #888;
+        }
+        button {
+            width: 100%;
+            padding: 13px;
+            background: #4285f4;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 8px;
+        }
+        button:hover {
+            background: #3367d6;
+        }
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            text-align: center;
+            font-size: 15px;
+        }
+        .alert-error {
+            background: #ffebee;
+            color: #ea4335;
+            border: 1px solid #ea4335;
+        }
+        .alert-success {
+            background: #e8f5e9;
+            color: #34a853;
+            border: 1px solid #34a853;
+        }
+        p {
+            text-align: center;
+            margin-top: 18px;
+            color: #666;
+        }
+        a {
+            color: #4285f4;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px 8px 16px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Formulir Pendaftaran PPDB</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('main_bp.daftar') }}">
+            <div class="form-group">
+                <label for="nama">Nama Lengkap:</label>
+                <i class="fas fa-user"></i>
+                <input type="text" id="nama" name="nama" required>
+            </div>
+            <div class="form-group">
+                <label for="nisn">NISN:</label>
+                <i class="fas fa-id-card"></i>
+                <input type="text" id="nisn" name="nisn" required>
+            </div>
+            <div class="form-group">
+                <label for="asal_sekolah">Asal Sekolah:</label>
+                <i class="fas fa-school"></i>
+                <input type="text" id="asal_sekolah" name="asal_sekolah" required>
+            </div>
+            <div class="form-group">
+                <label for="alamat">Alamat:</label>
+                <i class="fas fa-map-marker-alt"></i>
+                <input type="text" id="alamat" name="alamat" required>
+            </div>
+            <div class="form-group">
+                <label for="no_hp">No. HP Orang Tua/Wali:</label>
+                <i class="fas fa-phone"></i>
+                <input type="text" id="no_hp" name="no_hp" required>
+            </div>
+            <div class="form-group">
+                <label for="pilihan_jurusan">Pilihan Jurusan:</label>
+                <i class="fas fa-list"></i>
+                <select id="pilihan_jurusan" name="pilihan_jurusan" required>
+                    <option value="">-- Pilih Jurusan --</option>
+                    <option value="IPA">IPA</option>
+                    <option value="IPS">IPS</option>
+                    <option value="Bahasa">Bahasa</option>
+                    <option value="Keagamaan">Keagamaan</option>
+                </select>
+            </div>
+            <button type="submit">Kirim Pendaftaran</button>
+        </form>
+        <p><a href="{{ url_for('main_bp.index') }}">Kembali ke Beranda</a></p>
+    </div>
+</body>
+</html>

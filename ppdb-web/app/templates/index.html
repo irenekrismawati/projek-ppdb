@@ -147,7 +147,7 @@
         <nav>
             <ul>
                 <li><a href="{{ url_for('main_bp.index') }}"><i class="fas fa-home"></i> Beranda</a></li>
-                <li><a href="{{ url_for('auth_bp.register') }}"><i class="fas fa-user-plus"></i> Daftar</a></li>
+                <li><a href="{{ url_for('main_bp.daftar') }}"><i class="fas fa-user-plus"></i> Daftar</a>
                 <li><a href="{{ url_for('auth_bp.login') }}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
             </ul>
         </nav>
@@ -186,7 +186,7 @@
         </section>
 
         <div class="actions">
-            <a href="{{ url_for('auth_bp.register') }}"><i class="fas fa-user-plus"></i> Daftar Sekarang</a>
+            <a href="{{ url_for('main_bp.daftar') }}"><i class="fas fa-user-plus"></i> Daftar Sekarang</a>
             <a href="{{ url_for('auth_bp.login') }}"><i class="fas fa-sign-in-alt"></i> Login</a>
         </div>
     </main>
