@@ -4,14 +4,18 @@ from app.models import db, Pendaftaran, Sekolah
 
 main_bp = Blueprint('main_bp', __name__)
 
-# -------- Halaman Utama - Daftar Pendaftaran User --------
+# -------- Halaman Utama (Publik) --------
 @main_bp.route("/")
-@login_required
 def index():
+    return render_template("index.html")
+
+# -------- Dashboard User (Harus Login) --------
+@main_bp.route('/dashboard')
+@login_required
+def dashboard():
     # Ambil daftar pendaftaran yang terkait dengan user yang sedang login
     pendaftarans = Pendaftaran.query.filter_by(user_id=current_user.id).all()
-    
-    return render_template("index.html", pendaftarans=pendaftarans)
+    return render_template("dashboard.html", current_user=current_user, pendaftarans=pendaftarans)
 
 # -------- Halaman Detail Pendaftaran --------
 @main_bp.route('/pendaftaran/<int:pendaftaran_id>')
@@ -19,13 +23,6 @@ def index():
 def view_pendaftaran(pendaftaran_id):
     # Ambil data pendaftaran tertentu berdasarkan ID
     pendaftaran = Pendaftaran.query.get_or_404(pendaftaran_id)
-    
     # Ambil data sekolah terkait pendaftaran
     sekolah = Sekolah.query.get(pendaftaran.sekolah_id)
-    
     return render_template("detail_pendaftaran.html", pendaftaran=pendaftaran, sekolah=sekolah)
-
-@main_bp.route('/dashboard')
-@login_required
-def dashboard():
-    return render_template('dashboard.html', current_user=current_user)

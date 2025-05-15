@@ -68,11 +68,11 @@ def register():
             
     return render_template('register.html')
 
-@auth_bp.route('/dashboard')
+@auth_bp.route('/admin-dashboard')
 @login_required
-def dashboard():
+def admin_dashboard():
     return render_template('dashboard.html', current_user=current_user)
-# -------- LOGOUT --------
+
 @auth_bp.route('/logout')
 @login_required
 def logout():
