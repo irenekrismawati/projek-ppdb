@@ -3,61 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PPDB Web</title>
+    <title>PPDB Sekolah - Portal Penerimaan Peserta Didik Baru</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #71b7e6, #9b59b6);
             font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
             padding: 0;
+            background: linear-gradient(135deg, #71b7e6, #9b59b6);
+            color: #333;
         }
-        .container {
-            max-width: 500px;
-            margin: 60px auto;
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.13);
-            padding: 36px 32px 28px 32px;
-        }
-        h1 {
-            color: #4285f4;
+        header {
+            background: #4285f4;
+            color: white;
+            padding: 32px 0 18px 0;
             text-align: center;
-            margin-bottom: 18px;
-            font-size: 28px;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            box-shadow: 0 4px 16px rgba(66,133,244,0.13);
         }
-        h2 {
-            color: #9b59b6;
-            margin-top: 30px;
-            margin-bottom: 12px;
-            font-size: 20px;
-            text-align: center;
+        header h1 {
+            margin: 0 0 8px 0;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+        }
+        header p {
+            margin: 0 0 18px 0;
+            font-size: 1.1rem;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 10px 0;
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+        nav ul li {
+            display: inline;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: color 0.2s;
+        }
+        nav ul li a:hover {
+            color: #ffd700;
+            text-decoration: underline;
+        }
+        main {
+            padding: 40px 10px 20px 10px;
+            max-width: 800px;
+            margin: 0 auto;
         }
         .info-box {
             background: #e9f5ff;
             border-left: 6px solid #4285f4;
-            padding: 20px 18px;
-            border-radius: 10px;
+            padding: 24px 20px;
+            border-radius: 12px;
             margin-bottom: 28px;
+            box-shadow: 0 2px 8px rgba(66,133,244,0.07);
         }
         .info-box h3 {
             margin-top: 0;
             color: #4285f4;
-            font-size: 18px;
+            font-size: 1.2rem;
         }
         ol {
-            padding-left: 18px;
+            padding-left: 20px;
             color: #444;
             margin-bottom: 10px;
         }
         ol li {
             margin-bottom: 7px;
         }
-        p {
-            color: #555;
-            margin-bottom: 18px;
-            text-align: center;
+        .school-info {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            margin-bottom: 28px;
+        }
+        .school-info h2 {
+            color: #9b59b6;
+            margin-top: 0;
+            font-size: 1.3rem;
+        }
+        .school-info ul {
+            margin: 0 0 0 18px;
+            color: #444;
+        }
+        .school-info li {
+            margin-bottom: 6px;
         }
         .actions {
             display: flex;
@@ -81,30 +120,42 @@
             background: #3367d6;
         }
         footer {
+            background: #f1f1f1;
             text-align: center;
-            color: #888;
-            margin-top: 40px;
+            padding: 15px;
             font-size: 14px;
+            margin-top: 40px;
+            color: #555;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
         }
         @media (max-width: 600px) {
-            .container {
-                padding: 20px 8px 16px 8px;
-            }
-            .actions {
+            nav ul {
                 flex-direction: column;
-                gap: 12px;
+                gap: 10px;
+            }
+            main {
+                padding: 20px 2px 10px 2px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1><i class="fas fa-school"></i> Selamat Datang di PPDB Web</h1>
-        <div class="actions">
-            <a href="{{ url_for('auth_bp.login') }}"><i class="fas fa-sign-in-alt"></i> Login</a>
-            <a href="{{ url_for('auth_bp.register') }}"><i class="fas fa-user-plus"></i> Daftar</a>
-        </div>
-        <div class="info-box">
+    <header>
+        <h1><i class="fas fa-school"></i> PPDB Sekolah</h1>
+        <p>Portal Penerimaan Peserta Didik Baru Tahun 2025</p>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('main_bp.index') }}"><i class="fas fa-home"></i> Beranda</a></li>
+                <li><a href="{{ url_for('auth_bp.register') }}"><i class="fas fa-user-plus"></i> Daftar</a></li>
+                <li><a href="{{ url_for('auth_bp.login') }}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Petunjuk Pendaftaran -->
+        <section class="info-box">
             <h3><i class="fas fa-info-circle"></i> Cara Pendaftaran PPDB</h3>
             <ol>
                 <li><strong>Daftar Akun:</strong> Klik menu <b>Daftar</b> dan isi formulir registrasi untuk membuat akun.</li>
@@ -113,15 +164,35 @@
                 <li><strong>Kirim Formulir:</strong> Periksa kembali semua data, lalu klik <b>Kirim</b> untuk menyelesaikan pendaftaran.</li>
             </ol>
             <p>Pastikan semua informasi sudah benar dan lengkap sebelum mengirim formulir.</p>
-        </div>
-        <section>
-            <h2><i class="fas fa-bullhorn"></i> Informasi Penerimaan Peserta Didik Baru</h2>
-            <p>Selamat datang di portal resmi PPDB sekolah kami. Silakan gunakan menu di atas untuk mendaftar atau melihat informasi lebih lanjut.</p>
-            <p>Pastikan Anda menyiapkan dokumen yang dibutuhkan sebelum mendaftar.</p>
         </section>
-    </div>
+
+        <!-- Informasi Sekolah -->
+        <section class="school-info">
+            <h2><i class="fas fa-building"></i> Informasi Sekolah</h2>
+            <ul>
+                <li><strong>Nama Sekolah:</strong> SMA Negeri 1 Contoh</li>
+                <li><strong>Alamat:</strong> Jl. Pendidikan No. 123, Kota Contoh</li>
+                <li><strong>Akreditasi:</strong> A</li>
+                <li><strong>Program Unggulan:</strong> IPA, IPS, Bahasa, dan Keagamaan</li>
+                <li><strong>Kontak:</strong> (021) 12345678 | info@sman1contoh.sch.id</li>
+            </ul>
+        </section>
+
+        <!-- Informasi tambahan -->
+        <section class="school-info">
+            <h2><i class="fas fa-bullhorn"></i> Informasi Penerimaan Peserta Didik Baru</h2>
+            <p>Selamat datang di portal resmi PPDB SMA Negeri 1 Contoh. Silakan gunakan menu di atas untuk mendaftar atau melihat informasi lebih lanjut.</p>
+            <p>Pastikan Anda menyiapkan dokumen yang dibutuhkan sebelum mendaftar. Jadwal pendaftaran: <b>10 Juni 2025 - 25 Juni 2025</b>.</p>
+        </section>
+
+        <div class="actions">
+            <a href="{{ url_for('auth_bp.register') }}"><i class="fas fa-user-plus"></i> Daftar Sekarang</a>
+            <a href="{{ url_for('auth_bp.login') }}"><i class="fas fa-sign-in-alt"></i> Login</a>
+        </div>
+    </main>
+
     <footer>
-        <p>&copy; {{ current_year or '2025' }} PPDB Web. Semua hak dilindungi.</p>
+        <p>&copy; {{ current_year or '2025' }} PPDB SMA Negeri 1 Contoh. Semua hak dilindungi.</p>
     </footer>
 </body>
 </html>
