@@ -4,126 +4,124 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PPDB Web</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
-            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #71b7e6, #9b59b6);
+            font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: #f9f9f9;
-            color: #333;
         }
-
-        header {
-            background: #007BFF;
-            color: white;
-            padding: 20px 0;
+        .container {
+            max-width: 500px;
+            margin: 60px auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+            padding: 36px 32px 28px 32px;
+        }
+        h1 {
+            color: #4285f4;
+            text-align: center;
+            margin-bottom: 18px;
+            font-size: 28px;
+        }
+        h2 {
+            color: #9b59b6;
+            margin-top: 30px;
+            margin-bottom: 12px;
+            font-size: 20px;
             text-align: center;
         }
-
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 10px 0 0;
+        .info-box {
+            background: #e9f5ff;
+            border-left: 6px solid #4285f4;
+            padding: 20px 18px;
+            border-radius: 10px;
+            margin-bottom: 28px;
+        }
+        .info-box h3 {
+            margin-top: 0;
+            color: #4285f4;
+            font-size: 18px;
+        }
+        ol {
+            padding-left: 18px;
+            color: #444;
+            margin-bottom: 10px;
+        }
+        ol li {
+            margin-bottom: 7px;
+        }
+        p {
+            color: #555;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+        .actions {
             display: flex;
             justify-content: center;
             gap: 20px;
+            margin: 24px 0 10px 0;
         }
-
-        nav ul li {
-            display: inline;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        nav ul li a:hover {
-            text-decoration: underline;
-        }
-
-        main {
-            padding: 40px 20px;
-            text-align: center;
-        }
-
-        section {
-            background: white;
-            max-width: 800px;
-            margin: 0 auto 20px;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .info-box {
-            background: #e9f5ff;
-            border-left: 6px solid #007BFF;
-            text-align: left;
-            padding: 20px;
-            margin-bottom: 30px;
+        .actions a {
+            background: #4285f4;
+            color: #fff;
+            padding: 12px 28px;
+            border: none;
             border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.2s;
+            box-shadow: 0 2px 8px rgba(66,133,244,0.08);
         }
-
-        .info-box h3 {
-            margin-top: 0;
-            color: #007BFF;
+        .actions a:hover {
+            background: #3367d6;
         }
-
         footer {
-            background: #f1f1f1;
             text-align: center;
-            padding: 15px;
-            font-size: 14px;
+            color: #888;
             margin-top: 40px;
-            color: #555;
+            font-size: 14px;
         }
-
         @media (max-width: 600px) {
-            nav ul {
+            .container {
+                padding: 20px 8px 16px 8px;
+            }
+            .actions {
                 flex-direction: column;
+                gap: 12px;
             }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Selamat Datang di PPDB Web</h1>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('main_bp.index') }}">Beranda</a></li>
-                <li><a href="{{ url_for('auth_bp.register') }}">Daftar</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <!-- Petunjuk Pendaftaran -->
-        <section class="info-box">
-            <h3>Cara Pendaftaran PPDB</h3>
+    <div class="container">
+        <h1><i class="fas fa-school"></i> Selamat Datang di PPDB Web</h1>
+        <div class="actions">
+            <a href="{{ url_for('auth_bp.login') }}"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="{{ url_for('auth_bp.register') }}"><i class="fas fa-user-plus"></i> Daftar</a>
+        </div>
+        <div class="info-box">
+            <h3><i class="fas fa-info-circle"></i> Cara Pendaftaran PPDB</h3>
             <ol>
-                <li><strong>Daftar Akun:</strong> Klik menu "Daftar" dan isi formulir registrasi untuk membuat akun.</li>
+                <li><strong>Daftar Akun:</strong> Klik menu <b>Daftar</b> dan isi formulir registrasi untuk membuat akun.</li>
                 <li><strong>Login:</strong> Setelah berhasil daftar, masuk ke sistem menggunakan email dan password Anda.</li>
                 <li><strong>Isi Formulir:</strong> Lengkapi formulir pendaftaran dengan data diri dan dokumen yang diminta.</li>
-                <li><strong>Kirim Formulir:</strong> Periksa kembali semua data, lalu klik "Kirim" untuk menyelesaikan pendaftaran.</li>
+                <li><strong>Kirim Formulir:</strong> Periksa kembali semua data, lalu klik <b>Kirim</b> untuk menyelesaikan pendaftaran.</li>
             </ol>
             <p>Pastikan semua informasi sudah benar dan lengkap sebelum mengirim formulir.</p>
-        </section>
-
-        <!-- Informasi tambahan -->
+        </div>
         <section>
-            <h2>Informasi Penerimaan Peserta Didik Baru</h2>
+            <h2><i class="fas fa-bullhorn"></i> Informasi Penerimaan Peserta Didik Baru</h2>
             <p>Selamat datang di portal resmi PPDB sekolah kami. Silakan gunakan menu di atas untuk mendaftar atau melihat informasi lebih lanjut.</p>
             <p>Pastikan Anda menyiapkan dokumen yang dibutuhkan sebelum mendaftar.</p>
         </section>
-    </main>
-
+    </div>
     <footer>
         <p>&copy; {{ current_year or '2025' }} PPDB Web. Semua hak dilindungi.</p>
     </footer>
-
-    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
 </html>
