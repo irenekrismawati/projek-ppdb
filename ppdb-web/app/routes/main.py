@@ -24,3 +24,8 @@ def view_pendaftaran(pendaftaran_id):
     sekolah = Sekolah.query.get(pendaftaran.sekolah_id)
     
     return render_template("detail_pendaftaran.html", pendaftaran=pendaftaran, sekolah=sekolah)
+
+@main_bp.route('/dashboard')
+@login_required
+def dashboard():
+    return render_template('dashboard.html', current_user=current_user)

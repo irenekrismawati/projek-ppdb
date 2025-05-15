@@ -85,9 +85,9 @@
             <p>Username: {{ current_user.username }}</p>
         </div>
         <div class="actions">
+            <a href="{{ url_for('main_bp.dashboard') }}">Dashboard</a>
             <a href="{{ url_for('main_bp.index') }}">Beranda</a>
             <a href="{{ url_for('auth_bp.logout') }}" class="logout">Logout</a>
-            <a href="{{ url_for('main_bp.dashboard') }}">Dashboard</a>
         </div>
 
         <div class="ppdb-info">

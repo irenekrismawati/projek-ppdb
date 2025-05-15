@@ -1,8 +1,7 @@
 import os
-from flask import Blueprint, render_template, redirect, url_for, request, flash, current_user
-from flask_login import login_user, logout_user, login_required
+from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from werkzeug.utils import secure_filename
 
 from app.models import User
 from app import db
@@ -73,7 +72,6 @@ def register():
 @login_required
 def dashboard():
     return render_template('dashboard.html', current_user=current_user)
-
 # -------- LOGOUT --------
 @auth_bp.route('/logout')
 @login_required

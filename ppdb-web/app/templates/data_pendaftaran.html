@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Pendaftar</title>
+</head>
+<body>
+    <h2>Data Pendaftar</h2>
+    <table border="1">
+        <tr>
+            <th>No</th>
+            <th>Nama</th>
+            <th>Alamat</th>
+            <th>Sekolah Asal</th>
+        </tr>
+        {% for p in pendaftar %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ p.nama }}</td>
+            <td>{{ p.alamat }}</td>
+            <td>{{ p.sekolah_asal }}</td>
+        </tr>
+        {% endfor %}
+    </table><br>
+    <a href="{{ url_for('dashboard') }}">Kembali ke Dashboard</a>
+</body>
+</html>
