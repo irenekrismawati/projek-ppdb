@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard PPDB</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #71b7e6, #9b59b6);
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #4285f4;
+            margin-top: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #4285f4;
+            color: white;
+        }
+        tr:hover {
+            background: #f5f5f5;
+        }
+        .status-pending {
+            color: #f4b400;
+        }
+        .status-approved {
+            color: #0f9d58;
+        }
+        .status-rejected {
+            color: #db4437;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1><i class="fas fa-tachometer-alt"></i> Dashboard PPDB</h1>
+            <p>Selamat datang, {{ current_user.name }}!</p>
+            
+            {% if pendaftarans %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>NISN</th>
+                            <th>Jurusan</th>
+                            <th>Status</th>
+                            <th>Tanggal Daftar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in pendaftarans %}
+                            <tr>
+                                <td>{{ p.nama }}</td>
+                                <td>{{ p.nisn }}</td>
+                                <td>{{ p.pilihan_jurusan }}</td>
+                                <td class="status-{{ p.status }}">{{ p.status }}</td>
+                                <td>{{ p.tanggal_daftar.strftime('%d-%m-%Y') }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Belum ada pendaftaran.</p>
+            {% endif %}
+            
+            <div style="margin-top: 20px;">
+                <a href="{{ url_for('main_bp.daftar') }}" style="background: #4285f4; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+                    <i class="fas fa-plus"></i> Daftar Baru
+                </a>
+                <a href="{{ url_for('main_bp.index') }}" style="background: #666; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-left: 10px;">
+                    <i class="fas fa-home"></i> Kembali ke Beranda
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

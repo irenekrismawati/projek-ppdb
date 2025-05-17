@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - PPDB</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* ... existing styles ... */
+        .status-pending { color: #f4b400; }
+        .status-approved { color: #0f9d58; }
+        .status-rejected { color: #db4437; }
+        .btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            color: white;
+            margin: 4px;
+        }
+        .btn-approve { background: #0f9d58; }
+        .btn-reject { background: #db4437; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1><i class="fas fa-user-shield"></i> Admin Dashboard</h1>
+            <p>Selamat datang, {{ current_user.name }}!</p>
+
+            <h2>Daftar Pendaftaran</h2>
+            {% if pendaftarans %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>NISN</th>
+                        <th>Asal Sekolah</th>
+                        <th>Jurusan</th>
+                        <th>Status</th>
+                        <th>Tanggal</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in pendaftarans %}
+                    <tr>
+                        <td>{{ p.nama }}</td>
+                        <td>{{ p.nisn }}</td>
+                        <td>{{ p.asal_sekolah }}</td>
+                        <td>{{ p.pilihan_jurusan }}</td>
+                        <td class="status-{{ p.status }}">{{ p.status }}</td>
+                        <td>{{ p.tanggal_daftar.strftime('%d-%m-%Y') }}</td>
+                        <td>
+                            {% if p.status == 'pending' %}
+                            <a href="{{ url_for('admin_bp.approve_pendaftaran', id=p.id) }}" class="btn btn-approve">
+                                <i class="fas fa-check"></i> Setujui
+                            </a>
+                            <a href="{{ url_for('admin_bp.reject_pendaftaran', id=p.id) }}" class="btn btn-reject">
+                                <i class="fas fa-times"></i> Tolak
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>Belum ada pendaftaran.</p>
+            {% endif %}
+            
+            <div style="margin-top: 20px;">
+                <a href="{{ url_for('main_bp.index') }}" class="btn">
+                    <i class="fas fa-home"></i> Kembali ke Beranda
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
