@@ -141,19 +141,29 @@
     </style>
 </head>
 <body>
-    <header>
-        <h1><i class="fas fa-school"></i> PPDB Sekolah</h1>
-        <p>Portal Penerimaan Peserta Didik Baru Tahun 2025</p>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('main_bp.index') }}"><i class="fas fa-home"></i> Beranda</a></li>
-                <li><a href="{{ url_for('main_bp.daftar') }}"><i class="fas fa-user-plus"></i> Daftar</a>
-                <li><a href="{{ url_for('auth_bp.login') }}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
-            </ul>
-        </nav>
-    </header>
+   <header>
+    <h1><i class="fas fa-school"></i> PPDB Sekolah</h1>
+    <p>Portal Penerimaan Peserta Didik Baru Tahun 2025</p>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('main_bp.index') }}"><i class="fas fa-home"></i> Beranda</a></li>
+            <li><a href="{{ url_for('auth_bp.login') }}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+        </ul>
+    </nav>
+</header>
 
-    <main>
+<main>
+    <!-- ...existing code... -->
+
+    <!-- Remove this section -->
+    <!-- <div class="actions" style="margin-bottom: 32px;">
+        <a href="{{ url_for('main_bp.daftar') }}">
+            <i class="fas fa-user-plus"></i> Daftar Sekarang
+        </a>
+    </div> -->
+    
+    <!-- ...existing code... -->
+</main>
         <!-- Petunjuk Pendaftaran -->
         <section class="info-box">
             <h3><i class="fas fa-info-circle"></i> Cara Pendaftaran PPDB</h3>
@@ -184,13 +194,6 @@
             <p>Selamat datang di portal resmi PPDB SMA Negeri 1 Contoh. Silakan gunakan menu di atas untuk mendaftar atau melihat informasi lebih lanjut.</p>
             <p>Pastikan Anda menyiapkan dokumen yang dibutuhkan sebelum mendaftar. Jadwal pendaftaran: <b>10 Juni 2025 - 25 Juni 2025</b>.</p>
         </section>
-
-        <!-- Tombol Daftar -->
-        <div class="actions" style="margin-bottom: 32px;">
-            <a href="{{ url_for('main_bp.daftar') }}">
-                <i class="fas fa-user-plus"></i> Daftar Sekarang
-            </a>
-        </div>
     </main>
 
     <footer>

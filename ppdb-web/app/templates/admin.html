@@ -6,72 +6,252 @@
     <title>Admin Dashboard - PPDB</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-bg: #ecf0f1;
+        }
+        
         body {
             font-family: 'Segoe UI', sans-serif;
             margin: 0;
             padding: 0;
-            background: #f5f5f5;
+            background: var(--light-bg);
         }
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 20px;
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
         }
-        .card {
-            background: white;
-            border-radius: 8px;
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: var(--primary-color);
+            color: white;
             padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+
+        .sidebar-header {
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-menu {
+            margin-top: 30px;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 15px;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-item i {
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+
         .header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+
+        /* Stats Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
             margin-bottom: 20px;
         }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-card i {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        /* Table Styles */
+        .data-table {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
         }
-        th, td {
-            padding: 12px;
+
+        th {
+            background: var(--primary-color);
+            color: white;
+            padding: 15px;
             text-align: left;
+        }
+
+        td {
+            padding: 15px;
             border-bottom: 1px solid #ddd;
         }
-        th {
-            background: #4285f4;
-            color: white;
+
+        tr:hover {
+            background: #f5f5f5;
         }
+
         .btn {
             padding: 8px 16px;
-            border-radius: 4px;
+            border-radius: 5px;
             text-decoration: none;
             color: white;
             margin: 4px;
-            cursor: pointer;
+            display: inline-block;
+            transition: all 0.3s;
         }
-        .btn-approve { background: #0f9d58; }
-        .btn-reject { background: #db4437; }
-        .btn-logout { background: #666; }
-        .status-pending { color: #f4b400; }
-        .status-approved { color: #0f9d58; }
-        .status-rejected { color: #db4437; }
+
+        .btn-approve {
+            background: var(--success-color);
+        }
+
+        .btn-reject {
+            background: var(--danger-color);
+        }
+
+        .btn-logout {
+            background: var(--danger-color);
+        }
+
+        .status-pending {
+            color: var(--warning-color);
+            font-weight: bold;
+        }
+
+        .status-approved {
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        .status-rejected {
+            color: var(--danger-color);
+            font-weight: bold;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <div class="header">
-                <h1><i class="fas fa-user-shield"></i> Admin Dashboard</h1>
-                <a href="{{ url_for('auth_bp.logout') }}" class="btn btn-logout">
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-graduation-cap"></i> PPDB</h2>
+                <p>Admin Panel</p>
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-users"></i> Pendaftar
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-chart-bar"></i> Statistik
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-cog"></i> Pengaturan
+                </a>
+                <a href="{{ url_for('auth_bp.logout') }}" class="nav-item">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1><i class="fas fa-user-shield"></i> Dashboard</h1>
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span>{{ current_user.name }}</span>
+                </div>
             </div>
 
-            <div class="card">
-                <h2><i class="fas fa-users"></i> Daftar Pendaftaran</h2>
+            <!-- Statistics Cards -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <i class="fas fa-users" style="color: var(--secondary-color)"></i>
+                    <h3>Total Pendaftar</h3>
+                    <h2>{{ pendaftarans|length }}</h2>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-clock" style="color: var(--warning-color)"></i>
+                    <h3>Menunggu</h3>
+                    <h2>{{ pendaftarans|selectattr('status', 'equalto', 'pending')|list|length }}</h2>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-check-circle" style="color: var(--success-color)"></i>
+                    <h3>Diterima</h3>
+                    <h2>{{ pendaftarans|selectattr('status', 'equalto', 'approved')|list|length }}</h2>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-times-circle" style="color: var(--danger-color)"></i>
+                    <h3>Ditolak</h3>
+                    <h2>{{ pendaftarans|selectattr('status', 'equalto', 'rejected')|list|length }}</h2>
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="data-table">
+                <h2><i class="fas fa-list"></i> Daftar Pendaftaran</h2>
                 {% if pendaftarans %}
                 <table>
                     <thead>
@@ -92,7 +272,10 @@
                             <td>{{ p.nisn }}</td>
                             <td>{{ p.asal_sekolah }}</td>
                             <td>{{ p.pilihan_jurusan }}</td>
-                            <td class="status-{{ p.status }}">{{ p.status }}</td>
+                            <td class="status-{{ p.status }}">
+                                <i class="fas fa-{% if p.status == 'pending' %}clock{% elif p.status == 'approved' %}check-circle{% else %}times-circle{% endif %}"></i>
+                                {{ p.status }}
+                            </td>
                             <td>{{ p.tanggal_daftar.strftime('%d-%m-%Y') }}</td>
                             <td>
                                 {% if p.status == 'pending' %}

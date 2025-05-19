@@ -1,21 +1,20 @@
 from flask import Blueprint, render_template, redirect, url_for, flash
-from flask_login import login_required
+from flask_login import login_required, current_user
 from app.models import db, User, Pendaftaran
 from app.routes.auth import admin_required
 
-admin_bp = Blueprint('admin_bp', __name__, url_prefix='/admin')
+# Define blueprint
+admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
+# Add dashboard route
 @admin_bp.route('/dashboard')
 @login_required
 @admin_required
-def admin_dashboard():
-    print("Accessing admin dashboard...")  # Debug print
+def dashboard():
     pendaftarans = Pendaftaran.query.all()
-    users = User.query.filter_by(role='user').all()
-    print(f"Found {len(pendaftarans)} pendaftarans")  # Debug print
-    return render_template('dashboard_admin.html',
+    return render_template('dashboard_admin.html', 
         pendaftarans=pendaftarans,
-        users=users
+        current_user=current_user
     )
 
 @admin_bp.route('/approve/<int:id>')
@@ -26,7 +25,7 @@ def approve_pendaftaran(id):
     pendaftaran.status = 'approved'
     db.session.commit()
     flash('Pendaftaran berhasil disetujui!', 'success')
-    return redirect(url_for('admin_bp.admin_dashboard'))
+    return redirect(url_for('admin.dashboard'))
 
 @admin_bp.route('/reject/<int:id>')
 @login_required
@@ -36,4 +35,4 @@ def reject_pendaftaran(id):
     pendaftaran.status = 'rejected'
     db.session.commit()
     flash('Pendaftaran ditolak!', 'error')
-    return redirect(url_for('admin_bp.admin_dashboard'))
+    return redirect(url_for('admin.dashboard'))
