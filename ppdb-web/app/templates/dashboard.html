@@ -6,98 +6,278 @@
     <title>Dashboard PPDB</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
+        :root {
+            --primary: #1a237e;
+            --secondary: #0d47a1;
+            --accent: #00bcd4;
+            --success: #00897b;
+            --warning: #ffd700;
+            --danger: #d32f2f;
+            --light: #f5f5f5;
+            --dark: #263238;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #71b7e6, #9b59b6);
-            color: #333;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
         }
-        .container {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 20px;
+
+        body {
+            background: var(--light);
+            min-height: 100vh;
         }
-        .card {
+
+        .wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--gradient);
+            color: white;
+            padding: 2rem;
+            position: fixed;
+            height: 100vh;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-menu {
+            margin-top: 2rem;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 1rem;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateX(5px);
+        }
+
+        .nav-item i {
+            width: 25px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+        }
+
+        .header {
             background: white;
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
         }
-        h1 {
-            color: #4285f4;
-            margin-top: 0;
+
+        .notification {
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
+
+        .notification:hover {
+            transform: translateY(-5px);
+        }
+
+        .notification i {
+            font-size: 2rem;
+        }
+
+        .notification-approved { border-left: 5px solid var(--success); }
+        .notification-rejected { border-left: 5px solid var(--danger); }
+        .notification-pending { border-left: 5px solid var(--warning); }
+
+        .status-approved { color: var(--success); }
+        .status-rejected { color: var(--danger); }
+        .status-pending { color: var(--warning); }
+
         table {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
+
         th, td {
-            padding: 12px;
+            padding: 1rem;
             text-align: left;
-            border-bottom: 1px solid #ddd;
         }
+
         th {
-            background: #4285f4;
+            background: var(--gradient);
             color: white;
         }
+
+        tr:nth-child(even) {
+            background: rgba(0,0,0,0.02);
+        }
+
         tr:hover {
-            background: #f5f5f5;
+            background: rgba(0,0,0,0.05);
         }
-        .status-pending {
-            color: #f4b400;
+
+        .detail-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            background: var(--gradient);
+            transition: all 0.3s ease;
         }
-        .status-approved {
-            color: #0f9d58;
+
+        .detail-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
-        .status-rejected {
-            color: #db4437;
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .wrapper {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <h1><i class="fas fa-tachometer-alt"></i> Dashboard PPDB</h1>
-            <p>Selamat datang, {{ current_user.name }}!</p>
-            
-            {% if pendaftarans %}
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nama</th>
-                            <th>NISN</th>
-                            <th>Jurusan</th>
-                            <th>Status</th>
-                            <th>Tanggal Daftar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for p in pendaftarans %}
-                            <tr>
-                                <td>{{ p.nama }}</td>
-                                <td>{{ p.nisn }}</td>
-                                <td>{{ p.pilihan_jurusan }}</td>
-                                <td class="status-{{ p.status }}">{{ p.status }}</td>
-                                <td>{{ p.tanggal_daftar.strftime('%d-%m-%Y') }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <p>Belum ada pendaftaran.</p>
-            {% endif %}
-            
-            <div style="margin-top: 20px;">
-                <a href="{{ url_for('main_bp.daftar') }}" style="background: #4285f4; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
-                    <i class="fas fa-plus"></i> Daftar Baru
-                </a>
-                <a href="{{ url_for('main_bp.index') }}" style="background: #666; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-left: 10px;">
-                    <i class="fas fa-home"></i> Kembali ke Beranda
-                </a>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-school"></i> PPDB</h2>
+                <p>{{ current_user.name }}</p>
             </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-user"></i> Profil
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-file-alt"></i> Dokumen
+                </a>
+                <a href="{{ url_for('auth_bp.logout') }}" class="nav-item">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1><i class="fas fa-tachometer-alt"></i> Dashboard PPDB</h1>
+                <p>Selamat datang di Portal PPDB Online</p>
+            </div>
+
+            <!-- Status Notifications -->
+            {% for p in pendaftarans %}
+                {% if loop.first %}
+                    {% if p.status == 'approved' %}
+                    <div class="notification notification-approved">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h3>Selamat! Pendaftaran Anda Diterima</h3>
+                            <p>Anda telah diterima di jurusan {{ p.pilihan_jurusan }}. Silakan lengkapi berkas pendaftaran.</p>
+                        </div>
+                    </div>
+                    {% elif p.status == 'rejected' %}
+                    <div class="notification notification-rejected">
+                        <i class="fas fa-times-circle"></i>
+                        <div>
+                            <h3>Mohon Maaf</h3>
+                            <p>Pendaftaran Anda belum dapat kami terima. Silakan hubungi panitia untuk informasi lebih lanjut.</p>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="notification notification-pending">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h3>Pendaftaran Sedang Diproses</h3>
+                            <p>Mohon tunggu konfirmasi dari admin. Kami akan memberitahu hasilnya segera.</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+            <!-- Data Table -->
+            {% if pendaftarans %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>NISN</th>
+                        <th>Jurusan</th>
+                        <th>Status</th>
+                        <th>Tanggal Daftar</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in pendaftarans %}
+                    <tr>
+                        <td>{{ p.nama }}</td>
+                        <td>{{ p.nisn }}</td>
+                        <td>{{ p.pilihan_jurusan }}</td>
+                        <td class="status-{{ p.status }}">
+                            <i class="fas fa-{% if p.status == 'approved' %}check-circle{% elif p.status == 'rejected' %}times-circle{% else %}clock{% endif %}"></i>
+                            {{ p.status }}
+                        </td>
+                        <td>{{ p.tanggal_daftar.strftime('%d-%m-%Y') }}</td>
+                        <td>
+                            <a href="#" class="detail-btn">
+                                <i class="fas fa-eye"></i> Detail
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>Belum ada pendaftaran.</p>
+            {% endif %}
         </div>
     </div>
 </body>

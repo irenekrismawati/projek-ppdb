@@ -6,113 +6,141 @@
     <title>Formulir Pendaftaran PPDB</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #1a237e;
+            --secondary: #0d47a1;
+            --accent: #00bcd4;
+            --success: #00897b;
+            --warning: #ffd700;
+            --danger: #d32f2f;
+            --light: #f8f9fa;
+            --dark: #263238;
+        }
+
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #71b7e6, #9b59b6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            padding: 2rem;
         }
+
         .container {
-            background: #fff;
-            padding: 36px 32px 28px 32px;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.13);
-            max-width: 500px;
-            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
         }
+
         h1 {
-            color: #4285f4;
+            color: var(--primary);
             text-align: center;
-            margin-bottom: 28px;
-            font-size: 26px;
+            margin-bottom: 2rem;
+            font-size: 2rem;
         }
+
+        .form-section {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .form-section h2 {
+            color: var(--secondary);
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 1.5rem;
             position: relative;
         }
-        .form-group label {
+
+        label {
             display: block;
-            margin-bottom: 7px;
-            color: #555;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
             font-weight: 500;
         }
-        .form-group input, .form-group select {
+
+        .required::after {
+            content: '*';
+            color: var(--danger);
+            margin-left: 4px;
+        }
+
+        input, select, textarea {
             width: 100%;
-            padding: 12px 15px 12px 40px;
+            padding: 0.8rem 1rem 0.8rem 2.5rem;
             border: 2px solid #ddd;
             border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
+            font-size: 1rem;
+            transition: all 0.3s ease;
         }
-        .form-group input:focus, .form-group select:focus {
-            border-color: #4285f4;
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent);
             outline: none;
+            box-shadow: 0 0 0 3px rgba(0,188,212,0.1);
         }
+
         .form-group i {
             position: absolute;
-            left: 12px;
-            top: 38px;
-            color: #888;
-        }
-        button {
-            width: 100%;
-            padding: 13px;
-            background: #4285f4;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 17px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 8px;
-        }
-        button:hover {
-            background: #3367d6;
-        }
-        .alert {
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 18px;
-            text-align: center;
-            font-size: 15px;
-        }
-        .alert-error {
-            background: #ffebee;
-            color: #ea4335;
-            border: 1px solid #ea4335;
-        }
-        .alert-success {
-            background: #e8f5e9;
-            color: #34a853;
-            border: 1px solid #34a853;
-        }
-        p {
-            text-align: center;
-            margin-top: 18px;
+            left: 0.8rem;
+            top: 2.3rem;
             color: #666;
         }
-        a {
-            color: #4285f4;
-            text-decoration: none;
+
+        button {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 1.1rem;
             font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
-        a:hover {
-            text-decoration: underline;
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
-        @media (max-width: 480px) {
-            .container {
-                padding: 20px 8px 16px 8px;
-            }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .alert-error { background: #ffebee; color: var(--danger); }
+        .alert-success { background: #e8f5e9; color: var(--success); }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .container { padding: 1.5rem; }
+            .form-row { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Formulir Pendaftaran PPDB</h1>
+        <h1><i class="fas fa-user-plus"></i> Formulir Pendaftaran PPDB</h1>
+        
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
@@ -124,56 +152,158 @@
         {% endwith %}
 
         <form method="POST" action="{{ url_for('main_bp.daftar') }}">
-            <div class="form-group">
-                <label for="nama">Nama Lengkap:</label>
-                <i class="fas fa-user"></i>
-                <input type="text" id="nama" name="nama" required>
-            </div>
-            <div class="form-group">
-                <label for="nisn">NISN:</label>
-                <i class="fas fa-id-card"></i>
-                <input type="text" id="nisn" name="nisn" required>
-            </div>
-            <div class="form-group">
-                <label for="asal_sekolah">Asal Sekolah:</label>
-                <i class="fas fa-school"></i>
-                <input type="text" id="asal_sekolah" name="asal_sekolah" required>
-            </div>
-            <div class="form-group">
-                <label for="alamat">Alamat:</label>
-                <i class="fas fa-map-marker-alt"></i>
-                <input type="text" id="alamat" name="alamat" required>
-            </div>
-              <div class="form-group">
-                <label for="nama_ayah">Nama Ayah:</label>
-                <i class="fas fa-user"></i>
-                <input type="text" id="nama_ayah" name="nama_ayah" required>
+            <!-- Data Pribadi -->
+            <div class="form-section">
+                <h2><i class="fas fa-user"></i> Data Pribadi</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="required" for="nama">Nama Lengkap</label>
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="nama" name="nama" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="required" for="nisn">NISN</label>
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" id="nisn" name="nisn" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="required" for="tempat_lahir">Tempat Lahir</label>
+                        <i class="fas fa-map-marker"></i>
+                        <input type="text" id="tempat_lahir" name="tempat_lahir" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="required" for="tanggal_lahir">Tanggal Lahir</label>
+                        <i class="fas fa-calendar"></i>
+                        <input type="date" id="tanggal_lahir" name="tanggal_lahir" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="required" for="jenis_kelamin">Jenis Kelamin</label>
+                        <i class="fas fa-venus-mars"></i>
+                        <select id="jenis_kelamin" name="jenis_kelamin" required>
+                            <option value="">-- Pilih Jenis Kelamin --</option>
+                            <option value="L">Laki-laki</option>
+                            <option value="P">Perempuan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="required" for="agama">Agama</label>
+                        <i class="fas fa-pray"></i>
+                        <select id="agama" name="agama" required>
+                            <option value="">-- Pilih Agama --</option>
+                            <option value="Islam">Islam</option>
+                            <option value="Kristen">Kristen</option>
+                            <option value="Katolik">Katolik</option>
+                            <option value="Hindu">Hindu</option>
+                            <option value="Buddha">Buddha</option>
+                            <option value="Konghucu">Konghucu</option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="nama_ibu">Nama Ibu:</label>
-                <i class="fas fa-user"></i>
-                <input type="text" id="nama_ibu" name="nama_ibu" required>
+            <!-- Data Alamat -->
+            <div class="form-section">
+                <h2><i class="fas fa-home"></i> Data Alamat</h2>
+                <div class="form-group">
+                    <label class="required" for="alamat">Alamat Lengkap</label>
+                    <i class="fas fa-map-marker-alt"></i>
+                    <textarea id="alamat" name="alamat" rows="3" required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="required" for="desa">Desa/Kelurahan</label>
+                        <i class="fas fa-building"></i>
+                        <input type="text" id="desa" name="desa" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="required" for="kecamatan">Kecamatan</label>
+                        <i class="fas fa-building"></i>
+                        <input type="text" id="kecamatan" name="kecamatan" required>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="no_hp">No. HP Orang Tua/Wali:</label>
-                <i class="fas fa-phone"></i>
-                <input type="text" id="no_hp" name="no_hp" required>
+
+            <!-- Data Sekolah Asal -->
+            <div class="form-section">
+                <h2><i class="fas fa-school"></i> Data Sekolah Asal</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="required" for="asal_sekolah">Nama Sekolah</label>
+                        <i class="fas fa-school"></i>
+                        <input type="text" id="asal_sekolah" name="asal_sekolah" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="npsn">NPSN Sekolah</label>
+                        <i class="fas fa-id-card-alt"></i>
+                        <input type="text" id="npsn" name="npsn">
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="pilihan_jurusan">Pilihan Jurusan:</label>
-                <i class="fas fa-list"></i>
-                <select id="pilihan_jurusan" name="pilihan_jurusan" required>
-                    <option value="">-- Pilih Jurusan --</option>
-                    <option value="IPA">IPA</option>
-                    <option value="IPS">IPS</option>
-                    <option value="Bahasa">Bahasa</option>
-                    <option value="Keagamaan">Keagamaan</option>
-                </select>
+
+            <!-- Data Orang Tua -->
+            <div class="form-section">
+                <h2><i class="fas fa-users"></i> Data Orang Tua</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="required" for="nama_ayah">Nama Ayah</label>
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="nama_ayah" name="nama_ayah" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="required" for="pekerjaan_ayah">Pekerjaan Ayah</label>
+                        <i class="fas fa-briefcase"></i>
+                        <input type="text" id="pekerjaan_ayah" name="pekerjaan_ayah" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="required" for="nama_ibu">Nama Ibu</label>
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="nama_ibu" name="nama_ibu" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="required" for="pekerjaan_ibu">Pekerjaan Ibu</label>
+                        <i class="fas fa-briefcase"></i>
+                        <input type="text" id="pekerjaan_ibu" name="pekerjaan_ibu" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="required" for="no_hp">No. HP Orang Tua/Wali</label>
+                    <i class="fas fa-phone"></i>
+                    <input type="tel" id="no_hp" name="no_hp" required>
+                </div>
             </div>
-            <button type="submit">Kirim Pendaftaran</button>
+
+            <!-- Pilihan Jurusan -->
+            <!-- ...existing code... -->
+
+            <!-- Pilihan Jurusan -->
+            <div class="form-section">
+                <h2><i class="fas fa-graduation-cap"></i> Pilihan Jurusan</h2>
+                <div class="form-group">
+                    <label class="required" for="pilihan_jurusan">Pilihan Jurusan</label>
+                    <i class="fas fa-list"></i>
+                    <select id="pilihan_jurusan" name="pilihan_jurusan" required>
+                        <option value="">-- Pilih Jurusan --</option>
+                        <option value="RPL">Rekayasa Perangkat Lunak</option>
+                        <option value="PH">Perhotelan</option>
+                        <option value="TSM">Teknik Sepeda Motor</option>
+                    </select>
+                </div>
+            </div>
+
+<!-- ...existing code... -->
+
+            <button type="submit"><i class="fas fa-paper-plane"></i> Kirim Pendaftaran</button>
         </form>
-        <p><a href="{{ url_for('main_bp.index') }}">Kembali ke Beranda</a></p>
+
+        <p style="text-align: center; margin-top: 1.5rem;">
+            <a href="{{ url_for('main_bp.index') }}"><i class="fas fa-arrow-left"></i> Kembali ke Beranda</a>
+        </p>
     </div>
 </body>
 </html>
