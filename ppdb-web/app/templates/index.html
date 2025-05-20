@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PPDB Online - SMA Negeri 1 Contoh</title>
+    <title>PPDB Online - SMK KARYA BANGSA SINTANG</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -170,16 +170,13 @@
     <!-- Hero Section -->
     <div class="hero">
         <h1><i class="fas fa-school"></i> PPDB Online</h1>
-        <p>Penerimaan Peserta Didik Baru SMA Negeri 1 Contoh</p>
+        <p>Penerimaan Peserta Didik Baru SMK KARYA BANGSA SINTANG</p>
         <nav class="nav-menu">
             <a href="{{ url_for('main_bp.index') }}" class="nav-item">
                 <i class="fas fa-home"></i> Beranda
             </a>
             <a href="{{ url_for('auth_bp.login') }}" class="nav-item">
                 <i class="fas fa-sign-in-alt"></i> Login
-            </a>
-            <a href="{{ url_for('auth_bp.register') }}" class="nav-item">
-                <i class="fas fa-user-plus"></i> Daftar
             </a>
         </nav>
     </div>
@@ -188,7 +185,7 @@
     <div class="main-content">
         <div class="card">
             <h2><i class="fas fa-info-circle"></i> Informasi PPDB</h2>
-            <p>Selamat datang di portal PPDB Online SMA Negeri 1 Contoh. Pendaftaran dibuka untuk tahun ajaran 2025/2026.</p>
+            <p>Selamat datang di portal PPDB Online SMK KARYA BANGSA SINTANG Pendaftaran dibuka untuk tahun ajaran 2025/2026.</p>
             
             <div class="info-grid">
                 <div class="info-item">
@@ -201,22 +198,19 @@
                 </div>
                 <div class="info-item">
                     <h3><i class="fas fa-award"></i> Akreditasi</h3>
-                    <p>Terakreditasi A</p>
+                    <p>Terakreditasi B</p>
                 </div>
             </div>
         </div>
-
         <div class="card">
-            <h2><i class="fas fa-list-ol"></i> Alur Pendaftaran</h2>
-            <ol style="margin-left: 1.5rem;">
-                <li>Buat akun dengan mengklik tombol "Daftar"</li>
-                <li>Login menggunakan akun yang telah dibuat</li>
-                <li>Lengkapi formulir pendaftaran</li>
-                <li>Upload dokumen yang diperlukan</li>
-                <li>Tunggu pengumuman hasil seleksi</li>
-            </ol>
-        </div>
-
+        <h2><i class="fas fa-list-ol"></i> Alur Pendaftaran</h2>
+        <ol style="margin-left: 1.5rem;">
+            <li>Login ke sistem PPDB</li>
+            <li>Lengkapi formulir pendaftaran di dashboard</li>
+            <li>Upload dokumen yang diperlukan</li>
+            <li>Tunggu pengumuman hasil seleksi</li>
+        </ol>
+    </div>  
         <div class="card">
             <h2><i class="fas fa-phone-alt"></i> Kontak Kami</h2>
             <p><i class="fas fa-map-marker-alt"></i> Jl. Pendidikan No. 123, Kota Contoh</p>
@@ -226,7 +220,7 @@
     </div>
 
     <footer>
-        <p>&copy; {{ current_year or '2025' }} PPDB SMA Negeri 1 Contoh. Semua hak dilindungi.</p>
+        <p>&copy; {{ current_year or '2025' }} PPDB SMA SMK KARYA BANGSA SINTANG Semua hak dilindungi.</p>
     </footer>
 </body>
 </html>

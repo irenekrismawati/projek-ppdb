@@ -259,6 +259,86 @@
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
     </style>
+<style>
+    /* Add these new styles */
+    .document-section {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .document-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .document-item {
+        background: var(--light);
+        padding: 1.5rem;
+        border-radius: 10px;
+        border: 2px dashed #ddd;
+        transition: all 0.3s ease;
+    }
+
+    .document-item:hover {
+        border-color: var(--accent);
+    }
+
+    .document-item.uploaded {
+        border-color: var(--success);
+        border-style: solid;
+    }
+
+    .upload-label {
+        display: block;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .upload-icon {
+        font-size: 2rem;
+        color: var(--primary);
+        margin-bottom: 1rem;
+    }
+
+    .upload-input {
+        display: none;
+    }
+
+    .document-preview {
+        max-width: 100%;
+        margin-top: 1rem;
+    }
+
+    .document-info {
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .document-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        margin-top: 1rem;
+    }
+
+    .status-uploaded {
+        background: rgba(0,137,123,0.1);
+        color: var(--success);
+    }
+
+    .status-pending {
+        background: rgba(255,215,0,0.1);
+        color: var(--warning);
+    }
+</style>
 </head>
 <body>
     <div class="wrapper">
@@ -268,8 +348,12 @@
                 <h2><i class="fas fa-school"></i> PPDB</h2>
                 <p>{{ current_user.name }}</p>
             </div>
+           <!-- Update the profile link in the sidebar -->
             <nav class="nav-menu">
-                <a href="#" class="nav-item">
+                <a href="{{ url_for('main_bp.dashboard') }}" class="nav-item active">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="{{ url_for('main_bp.profile') }}" class="nav-item">
                     <i class="fas fa-user"></i> Profil
                 </a>
                 <a href="{{ url_for('auth_bp.logout') }}" class="nav-item">
@@ -277,7 +361,6 @@
                 </a>
             </nav>
         </div>
-
         <!-- Main Content -->
         <div class="main-content">
             <div class="header">
@@ -445,5 +528,285 @@
             {% endif %}
         </div>
     </div>
+{% if pendaftarans and pendaftarans[0].status == 'approved' %}
+<div class="document-section">
+    <h2><i class="fas fa-file-upload"></i> Upload Dokumen</h2>
+    <p class="mb-4">Silakan upload dokumen yang diperlukan di bawah ini:</p>
+    
+    <form method="POST" action="{{ url_for('main_bp.upload_documents') }}" enctype="multipart/form-data">
+        <div class="document-grid">
+            <!-- Ijazah/SKL -->
+            <div class="document-item" id="ijazah-container">
+                <label class="upload-label">
+                    <div class="upload-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <h3>Ijazah/SKL</h3>
+                    <p>Upload file PDF atau gambar</p>
+                    <input type="file" name="ijazah" class="upload-input" 
+                           accept=".pdf,.jpg,.jpeg,.png" 
+                           onchange="previewDocument(this, 'ijazah-container')">
+                </label>
+                <div class="document-info"></div>
+            </div>
+
+            <!-- Kartu Keluarga -->
+            <div class="document-item" id="kk-container">
+                <label class="upload-label">
+                    <div class="upload-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <h3>Kartu Keluarga</h3>
+                    <p>Upload file PDF atau gambar</p>
+                    <input type="file" name="kartu_keluarga" class="upload-input" 
+                           accept=".pdf,.jpg,.jpeg,.png"
+                           onchange="previewDocument(this, 'kk-container')">
+                </label>
+                <div class="document-info"></div>
+            </div>
+
+            <!-- Akta Kelahiran -->
+            <div class="document-item" id="akta-container">
+                <label class="upload-label">
+                    <div class="upload-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <h3>Akta Kelahiran</h3>
+                    <p>Upload file PDF atau gambar</p>
+                    <input type="file" name="akta_kelahiran" class="upload-input" 
+                           accept=".pdf,.jpg,.jpeg,.png"
+                           onchange="previewDocument(this, 'akta-container')">
+                </label>
+                <div class="document-info"></div>
+            </div>
+
+            <!-- Foto -->
+            <div class="document-item" id="foto-container">
+                <label class="upload-label">
+                    <div class="upload-icon">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    <h3>Pas Foto 3x4</h3>
+                    <p>Upload file gambar</p>
+                    <input type="file" name="foto" class="upload-input" 
+                           accept=".jpg,.jpeg,.png"
+                           onchange="previewDocument(this, 'foto-container')">
+                </label>
+                <div class="document-info"></div>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn" style="margin-top: 2rem;">
+            <i class="fas fa-cloud-upload-alt"></i> Upload Semua Dokumen
+        </button>
+    </form>
+</div>
+{% endif %}
+
+<!-- Add this JavaScript before closing body tag -->
+<script>
+function previewDocument(input, containerId) {
+    const container = document.getElementById(containerId);
+    const infoDiv = container.querySelector('.document-info');
+    const file = input.files[0];
+
+    if (file) {
+        const fileName = file.name;
+        const fileSize = (file.size / 1024 / 1024).toFixed(2); // Convert to MB
+        
+        container.classList.add('uploaded');
+        infoDiv.innerHTML = `
+            <div class="document-status status-uploaded">
+                <i class="fas fa-check-circle"></i> File dipilih
+            </div>
+            <p><strong>Nama:</strong> ${fileName}</p>
+            <p><strong>Ukuran:</strong> ${fileSize} MB</p>
+        `;
+
+        // If it's an image, show preview
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'document-preview';
+                
+                // Remove existing preview if any
+                const existingPreview = container.querySelector('.document-preview');
+                if (existingPreview) {
+                    existingPreview.remove();
+                }
+                
+                container.appendChild(img);
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+}
+</script>
+<!-- Add this after the notification section -->
+
+{% if pendaftarans and pendaftarans[0].status == 'approved' %}
+<div class="payment-section">
+    <h2><i class="fas fa-money-bill-wave"></i> Pembayaran PPDB</h2>
+    
+    <div class="payment-info-card">
+        <div class="payment-details">
+            <h3>Informasi Pembayaran</h3>
+            <div class="payment-amount">
+                <span class="amount-label">Total Pembayaran:</span>
+                <span class="amount">Rp 500.000</span>
+            </div>
+            <div class="bank-details">
+                <h4>Transfer ke rekening:</h4>
+                <ul>
+                    <li><strong>Bank BRI:</strong> 1234-5678-9012-3456</li>
+                    <li><strong>Atas Nama:</strong> SMK KARYA BANGSA SINTANG</li>
+                </ul>
+            </div>
+        </div>
+
+        <form method="POST" action="{{ url_for('main_bp.upload_payment') }}" enctype="multipart/form-data" class="payment-form">
+            <div class="form-group">
+                <label for="payment_method">Metode Pembayaran</label>
+                <select name="payment_method" id="payment_method" required>
+                    <option value="">Pilih Metode Pembayaran</option>
+                    <option value="transfer_bri">Transfer Bank BRI</option>
+                    <option value="transfer_bni">Transfer Bank BNI</option>
+                    <option value="transfer_mandiri">Transfer Bank Mandiri</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="payment_proof">Bukti Pembayaran</label>
+                <div class="upload-box" id="payment-proof-container">
+                    <label class="upload-label">
+                        <div class="upload-icon">
+                            <i class="fas fa-receipt"></i>
+                        </div>
+                        <p>Upload bukti pembayaran (jpg, png)</p>
+                        <input type="file" name="payment_proof" id="payment_proof" 
+                               accept=".jpg,.jpeg,.png" required
+                               onchange="previewPayment(this)">
+                    </label>
+                    <div class="preview-container"></div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-paper-plane"></i> Kirim Bukti Pembayaran
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Add these styles to your existing CSS -->
+<style>
+.payment-section {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.payment-info-card {
+    background: var(--light);
+    border-radius: 10px;
+    padding: 2rem;
+    margin-top: 1.5rem;
+}
+
+.payment-details {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.payment-amount {
+    background: var(--gradient);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin: 1.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.amount {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.bank-details {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-top: 1.5rem;
+}
+
+.bank-details ul {
+    list-style: none;
+    margin-top: 1rem;
+}
+
+.bank-details li {
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.bank-details li:before {
+    content: '\f054';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+}
+
+.upload-box {
+    border: 2px dashed #ddd;
+    border-radius: 10px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.upload-box:hover {
+    border-color: var(--accent);
+}
+
+.preview-container img {
+    max-width: 100%;
+    max-height: 300px;
+    margin-top: 1rem;
+    border-radius: 8px;
+}
+</style>
+
+<!-- Add this JavaScript before the closing body tag -->
+<script>
+function previewPayment(input) {
+    const container = document.querySelector('.preview-container');
+    const file = input.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            container.innerHTML = `
+                <img src="${e.target.result}" alt="Preview bukti pembayaran">
+                <div class="document-status status-uploaded" style="margin-top: 1rem;">
+                    <i class="fas fa-check-circle"></i> File dipilih
+                </div>
+                <p><strong>Nama file:</strong> ${file.name}</p>
+                <p><strong>Ukuran:</strong> ${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+            `;
+        }
+        reader.readAsDataURL(file);
+    }
+}
+</script>
 </body>
 </html>

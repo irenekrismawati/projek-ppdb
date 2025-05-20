@@ -38,3 +38,15 @@ class Sekolah(db.Model):
     kepala_sekolah = db.Column(db.String(100))
     email = db.Column(db.String(120))
     telepon = db.Column(db.String(20))
+
+class Payment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    pendaftaran_id = db.Column(db.Integer, db.ForeignKey('pendaftaran.id'), nullable=False)
+    amount = db.Column(db.Integer, nullable=False)
+    payment_method = db.Column(db.String(50), nullable=False)
+    payment_proof = db.Column(db.String(200))
+    status = db.Column(db.String(20), default='pending')  # pending, verified, rejected
+    uploaded_at = db.Column(db.DateTime, default=datetime.utcnow)
+    verified_at = db.Column(db.DateTime)
+    
+    pendaftaran = db.relationship('Pendaftaran', backref='payments')
