@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from app.models import db, Pendaftaran, Sekolah
+from sqlalchemy.exc import IntegrityError
 
 main_bp = Blueprint('main_bp', __name__)
 
@@ -9,37 +10,38 @@ main_bp = Blueprint('main_bp', __name__)
 def index():
     return render_template("index.html")
 
-@main_bp.route('/daftar', methods=['GET', 'POST'])
+from sqlalchemy.exc import IntegrityError
+
+@main_bp.route('/daftar', methods=['POST'])
+@login_required
 def daftar():
-    if request.method == 'POST':
-        # Ambil semua field dari form
-        nama = request.form.get('nama')
-        nisn = request.form.get('nisn')           # Tambahkan ini
-        asal_sekolah = request.form.get('asal_sekolah')
-        alamat = request.form.get('alamat')       # Tambahkan ini
-        no_hp = request.form.get('no_hp')
-        pilihan_jurusan = request.form.get('pilihan_jurusan')
+    nisn = request.form.get('nisn')
+    
+    # Check if NISN already exists
+    existing_registration = Pendaftaran.query.filter_by(nisn=nisn).first()
+    if existing_registration:
+        flash('NISN sudah terdaftar dalam sistem. Mohon periksa kembali NISN Anda.', 'error')
+        return redirect(url_for('main_bp.dashboard'))
 
-        # Cek jika user login, isi user_id, jika tidak, user_id=None
-        user_id = current_user.id if current_user.is_authenticated else None
-
-        # Validasi semua field required
-        if all([nama, nisn, asal_sekolah, alamat, no_hp, pilihan_jurusan]):
-            pendaftaran = Pendaftaran(
-                nama=nama,
-                nisn=nisn,              # Tambahkan ini
-                asal_sekolah=asal_sekolah,
-                alamat=alamat,          # Tambahkan ini
-                no_hp=no_hp,
-                pilihan_jurusan=pilihan_jurusan,
-                user_id=user_id
-            )
-            db.session.add(pendaftaran)
-            db.session.commit()
-            flash('Pendaftaran berhasil! Kami akan menghubungi Anda.', 'success')
-        else:
-            flash('Semua field harus diisi!', 'error')
-        return redirect(url_for('main_bp.daftar'))
+    try:
+        pendaftaran = Pendaftaran(
+            nama=request.form.get('nama'),
+            nisn=nisn,
+            asal_sekolah=request.form.get('asal_sekolah'),
+            alamat=request.form.get('alamat'),
+            no_hp=request.form.get('no_hp'),
+            pilihan_jurusan=request.form.get('pilihan_jurusan'),
+            status='pending',
+            user_id=current_user.id
+        )
+        db.session.add(pendaftaran)
+        db.session.commit()
+        flash('Pendaftaran berhasil dikirim!', 'success')
+    except IntegrityError:
+        db.session.rollback()
+        flash('Error: NISN sudah terdaftar', 'error')
+    
+    return redirect(url_for('main_bp.dashboard'))
     return render_template('daftar.html')
 
 @main_bp.route('/dashboard')

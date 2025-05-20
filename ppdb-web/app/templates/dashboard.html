@@ -178,6 +178,86 @@
                 flex-direction: column;
             }
         }
+        /* Add to existing CSS styles */
+.form-container {
+    padding: 2rem;
+}
+
+.form-section {
+    background: var(--light);
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+.form-section h3 {
+    color: var(--secondary);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--dark);
+    font-weight: 500;
+}
+
+.required::after {
+    content: '*';
+    color: var(--danger);
+    margin-left: 4px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--accent);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0,188,212,0.1);
+}
+
+.submit-btn {
+    background: var(--gradient);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
     </style>
 </head>
 <body>
@@ -189,14 +269,8 @@
                 <p>{{ current_user.name }}</p>
             </div>
             <nav class="nav-menu">
-                <a href="#" class="nav-item active">
-                    <i class="fas fa-tachometer-alt"></i> Dashboard
-                </a>
                 <a href="#" class="nav-item">
                     <i class="fas fa-user"></i> Profil
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-file-alt"></i> Dokumen
                 </a>
                 <a href="{{ url_for('auth_bp.logout') }}" class="nav-item">
                     <i class="fas fa-sign-out-alt"></i> Logout
@@ -210,7 +284,98 @@
                 <h1><i class="fas fa-tachometer-alt"></i> Dashboard PPDB</h1>
                 <p>Selamat datang di Portal PPDB Online</p>
             </div>
+<!-- Add this code right after the header div in main-content -->
 
+<!-- Registration Form -->
+{% if not pendaftarans %}
+<div class="card">
+    <div class="form-container">
+        <h2><i class="fas fa-user-plus"></i> Formulir Pendaftaran PPDB</h2>
+        <form method="POST" action="{{ url_for('main_bp.daftar') }}">
+            <!-- Data Pribadi -->
+            <div class="form-section">
+                <h3><i class="fas fa-user"></i> Data Pribadi</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="required">Nama Lengkap</label>
+                        <input type="text" name="nama" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="required">NISN</label>
+                        <input type="text" name="nisn" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="required">Tempat Lahir</label>
+                        <input type="text" name="tempat_lahir" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="required">Tanggal Lahir</label>
+                        <input type="date" name="tanggal_lahir" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="required">Jenis Kelamin</label>
+                        <select name="jenis_kelamin" required>
+                            <option value="">Pilih Jenis Kelamin</option>
+                            <option value="L">Laki-laki</option>
+                            <option value="P">Perempuan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="required">No. HP</label>
+                        <input type="tel" name="no_hp" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Alamat -->
+            <div class="form-section">
+                <h3><i class="fas fa-home"></i> Data Alamat</h3>
+                <div class="form-group">
+                    <label class="required">Alamat Lengkap</label>
+                    <textarea name="alamat" rows="3" required></textarea>
+                </div>
+            </div>
+
+            <!-- Data Sekolah -->
+            <div class="form-section">
+                <h3><i class="fas fa-school"></i> Data Sekolah Asal</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="required">Nama Sekolah</label>
+                        <input type="text" name="asal_sekolah" required>
+                    </div>
+                    <div class="form-group">
+                        <label>NPSN Sekolah</label>
+                        <input type="text" name="npsn_sekolah">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pilihan Jurusan -->
+            <div class="form-section">
+                <h3><i class="fas fa-graduation-cap"></i> Pilihan Jurusan</h3>
+                <div class="form-group">
+                    <label class="required">Pilihan Jurusan</label>
+                    <select name="pilihan_jurusan" required>
+                        <option value="">Pilih Jurusan</option>
+                        <option value="RPL">Rekayasa Perangkat Lunak</option>
+                        <option value="PH">Perhotelan</option>
+                        <option value="TSM">Teknik Sepeda Motor</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-paper-plane"></i> Kirim Pendaftaran
+            </button>
+        </form>
+    </div>
+</div>
+{% endif %}
             <!-- Status Notifications -->
             {% for p in pendaftarans %}
                 {% if loop.first %}

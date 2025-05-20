@@ -3,198 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PPDB Sekolah - Portal Penerimaan Peserta Didik Baru</title>
+    <title>PPDB Online - SMA Negeri 1 Contoh</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
+        :root {
+            --primary: #1a237e;
+            --secondary: #0d47a1;
+            --accent: #00bcd4;
+            --success: #00897b;
+            --warning: #ffd700;
+            --danger: #d32f2f;
+            --light: #f5f5f5;
+            --dark: #263238;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #71b7e6, #9b59b6);
-            color: #333;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
         }
-        header {
-            background: #4285f4;
+
+        body {
+            background: var(--light);
+            min-height: 100vh;
+        }
+
+        .wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--gradient);
             color: white;
-            padding: 32px 0 18px 0;
+            padding: 4rem 2rem;
             text-align: center;
-            border-bottom-left-radius: 30px;
-            border-bottom-right-radius: 30px;
-            box-shadow: 0 4px 16px rgba(66,133,244,0.13);
+            position: relative;
         }
-        header h1 {
-            margin: 0 0 8px 0;
-            font-size: 2.2rem;
-            letter-spacing: 1px;
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
         }
-        header p {
-            margin: 0 0 18px 0;
-            font-size: 1.1rem;
-        }
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 10px 0;
-            display: flex;
-            justify-content: center;
-            gap: 24px;
-        }
-        nav ul li {
-            display: inline;
-        }
-        nav ul li a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1rem;
-            transition: color 0.2s;
-        }
-        nav ul li a:hover {
-            color: #ffd700;
-            text-decoration: underline;
-        }
-        main {
-            padding: 40px 10px 20px 10px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .info-box {
-            background: #e9f5ff;
-            border-left: 6px solid #4285f4;
-            padding: 24px 20px;
-            border-radius: 12px;
-            margin-bottom: 28px;
-            box-shadow: 0 2px 8px rgba(66,133,244,0.07);
-        }
-        .info-box h3 {
-            margin-top: 0;
-            color: #4285f4;
+
+        .hero p {
             font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
         }
-        ol {
-            padding-left: 20px;
-            color: #444;
-            margin-bottom: 10px;
+
+        /* Navigation */
+        .nav-menu {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 50px;
+            display: inline-flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
-        ol li {
-            margin-bottom: 7px;
-        }
-        .school-info {
-            background: #fff;
-            border-radius: 12px;
-            padding: 24px 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-            margin-bottom: 28px;
-        }
-        .school-info h2 {
-            color: #9b59b6;
-            margin-top: 0;
-            font-size: 1.3rem;
-        }
-        .school-info ul {
-            margin: 0 0 0 18px;
-            color: #444;
-        }
-        .school-info li {
-            margin-bottom: 6px;
-        }
-        .actions {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 24px 0 10px 0;
-        }
-        .actions a {
-            background: #4285f4;
-            color: #fff;
-            padding: 12px 28px;
-            border: none;
-            border-radius: 8px;
+
+        .nav-item {
+            color: white;
             text-decoration: none;
-            font-size: 16px;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: -50px auto 0;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card h2 i {
+            color: var(--accent);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .info-item {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .info-item h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-item i {
+            color: var(--accent);
+        }
+
+        .button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--gradient);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
             font-weight: 600;
-            transition: background 0.2s;
-            box-shadow: 0 2px 8px rgba(66,133,244,0.08);
         }
-        .actions a:hover {
-            background: #3367d6;
+
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
+
         footer {
-            background: #f1f1f1;
+            background: var(--dark);
+            color: white;
             text-align: center;
-            padding: 15px;
-            font-size: 14px;
-            margin-top: 40px;
-            color: #555;
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
+            padding: 2rem;
+            margin-top: 4rem;
         }
-        @media (max-width: 600px) {
-            nav ul {
-                flex-direction: column;
-                gap: 10px;
-            }
-            main {
-                padding: 20px 2px 10px 2px;
-            }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .nav-menu { flex-direction: column; }
+            .main-content { padding: 0 1rem; }
+            .info-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-   <header>
-    <h1><i class="fas fa-school"></i> PPDB Sekolah</h1>
-    <p>Portal Penerimaan Peserta Didik Baru Tahun 2025</p>
-    <nav>
-        <ul>
-            <li><a href="{{ url_for('main_bp.index') }}"><i class="fas fa-home"></i> Beranda</a></li>
-            <li><a href="{{ url_for('auth_bp.login') }}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
-        </ul>
-    </nav>
-</header>
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1><i class="fas fa-school"></i> PPDB Online</h1>
+        <p>Penerimaan Peserta Didik Baru SMA Negeri 1 Contoh</p>
+        <nav class="nav-menu">
+            <a href="{{ url_for('main_bp.index') }}" class="nav-item">
+                <i class="fas fa-home"></i> Beranda
+            </a>
+            <a href="{{ url_for('auth_bp.login') }}" class="nav-item">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+            <a href="{{ url_for('auth_bp.register') }}" class="nav-item">
+                <i class="fas fa-user-plus"></i> Daftar
+            </a>
+        </nav>
+    </div>
 
-<main>
-    <!-- ...existing code... -->
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="card">
+            <h2><i class="fas fa-info-circle"></i> Informasi PPDB</h2>
+            <p>Selamat datang di portal PPDB Online SMA Negeri 1 Contoh. Pendaftaran dibuka untuk tahun ajaran 2025/2026.</p>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <h3><i class="fas fa-calendar-alt"></i> Jadwal Pendaftaran</h3>
+                    <p>10 Juni - 25 Juni 2025</p>
+                </div>
+                <div class="info-item">
+                    <h3><i class="fas fa-graduation-cap"></i> Program Unggulan</h3>
+                    <p>RPL, Perhotelan, Teknik Sepeda Motor</p>
+                </div>
+                <div class="info-item">
+                    <h3><i class="fas fa-award"></i> Akreditasi</h3>
+                    <p>Terakreditasi A</p>
+                </div>
+            </div>
+        </div>
 
-    <!-- Remove this section -->
-    <!-- <div class="actions" style="margin-bottom: 32px;">
-        <a href="{{ url_for('main_bp.daftar') }}">
-            <i class="fas fa-user-plus"></i> Daftar Sekarang
-        </a>
-    </div> -->
-    
-    <!-- ...existing code... -->
-</main>
-        <!-- Petunjuk Pendaftaran -->
-        <section class="info-box">
-            <h3><i class="fas fa-info-circle"></i> Cara Pendaftaran PPDB</h3>
-            <ol>
-                <li><strong>Daftar Akun:</strong> Klik menu <b>Daftar</b> dan isi formulir registrasi untuk membuat akun.</li>
-                <li><strong>Login:</strong> Setelah berhasil daftar, masuk ke sistem menggunakan email dan password Anda.</li>
-                <li><strong>Isi Formulir:</strong> Lengkapi formulir pendaftaran dengan data diri dan dokumen yang diminta.</li>
-                <li><strong>Kirim Formulir:</strong> Periksa kembali semua data, lalu klik <b>Kirim</b> untuk menyelesaikan pendaftaran.</li>
+        <div class="card">
+            <h2><i class="fas fa-list-ol"></i> Alur Pendaftaran</h2>
+            <ol style="margin-left: 1.5rem;">
+                <li>Buat akun dengan mengklik tombol "Daftar"</li>
+                <li>Login menggunakan akun yang telah dibuat</li>
+                <li>Lengkapi formulir pendaftaran</li>
+                <li>Upload dokumen yang diperlukan</li>
+                <li>Tunggu pengumuman hasil seleksi</li>
             </ol>
-            <p>Pastikan semua informasi sudah benar dan lengkap sebelum mengirim formulir.</p>
-        </section>
+        </div>
 
-        <!-- Informasi Sekolah -->
-        <section class="school-info">
-            <h2><i class="fas fa-building"></i> Informasi Sekolah</h2>
-            <ul>
-                <li><strong>Nama Sekolah:</strong> SMA Negeri 1 Contoh</li>
-                <li><strong>Alamat:</strong> Jl. Pendidikan No. 123, Kota Contoh</li>
-                <li><strong>Akreditasi:</strong> A</li>
-                <li><strong>Program Unggulan:</strong> IPA, IPS, Bahasa, dan Keagamaan</li>
-                <li><strong>Kontak:</strong> (021) 12345678 | info@sman1contoh.sch.id</li>
-            </ul>
-        </section>
-
-       <!-- Informasi tambahan -->
-        <section class="school-info">
-            <h2><i class="fas fa-bullhorn"></i> Informasi Penerimaan Peserta Didik Baru</h2>
-            <p>Selamat datang di portal resmi PPDB SMA Negeri 1 Contoh. Silakan gunakan menu di atas untuk mendaftar atau melihat informasi lebih lanjut.</p>
-            <p>Pastikan Anda menyiapkan dokumen yang dibutuhkan sebelum mendaftar. Jadwal pendaftaran: <b>10 Juni 2025 - 25 Juni 2025</b>.</p>
-        </section>
-    </main>
+        <div class="card">
+            <h2><i class="fas fa-phone-alt"></i> Kontak Kami</h2>
+            <p><i class="fas fa-map-marker-alt"></i> Jl. Pendidikan No. 123, Kota Contoh</p>
+            <p><i class="fas fa-phone"></i> (021) 12345678</p>
+            <p><i class="fas fa-envelope"></i> info@sman1contoh.sch.id</p>
+        </div>
+    </div>
 
     <footer>
         <p>&copy; {{ current_year or '2025' }} PPDB SMA Negeri 1 Contoh. Semua hak dilindungi.</p>
