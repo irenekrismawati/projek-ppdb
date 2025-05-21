@@ -339,6 +339,165 @@
         color: var(--warning);
     }
 </style>
+<style>
+    /* Update document section styles */
+    .document-section {
+        background: white;
+        border-radius: 12px;
+        padding: 1rem;  /* Reduced padding */
+        margin: 0.8rem;  /* Reduced margin */
+    }
+
+    .document-section h2 {
+        font-size: 1rem;  /* Smaller title */
+        margin-bottom: 0.3rem;
+        color: var(--primary);
+    }
+
+    .document-section p {
+        font-size: 0.75rem;  /* Smaller description text */
+        margin-bottom: 0.5rem;
+        color: #666;
+    }
+
+    .document-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Even smaller grid items */
+        gap: 0.6rem;  /* Smaller gap */
+        margin-top: 0.5rem;  /* Reduced top margin */
+    }
+
+    .document-item {
+        padding: 0.8rem;  /* Smaller padding */
+    }
+
+    .upload-label h3 {
+        font-size: 0.8rem;  /* Smaller heading */
+        margin: 0.2rem 0;
+    }
+
+    .upload-label p {
+        font-size: 0.7rem;  /* Smaller hint text */
+    }
+
+    .upload-icon {
+        font-size: 1.2rem;  /* Smaller icon */
+        margin-bottom: 0.3rem;
+    }
+
+    /* Adjust button size */
+    .document-section .submit-btn {
+        margin-top: 0.8rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+</style>
+<style>
+    /* Compact document section styles */
+    .document-section {
+        background: white;
+        border-radius: 10px;
+        padding: 1rem;
+        margin: 1rem 0;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .document-section h2 {
+        font-size: 0.9rem;
+        color: var(--primary);
+        margin-bottom: 0.3rem;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .document-section p {
+        font-size: 0.75rem;
+        color: #666;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Horizontal scrolling document grid */
+    .document-grid {
+        display: flex;
+        overflow-x: auto;
+        gap: 0.5rem;
+        padding: 0.5rem 0;
+        scroll-snap-type: x mandatory;
+    }
+
+    /* Hide scrollbar but keep functionality */
+    .document-grid::-webkit-scrollbar {
+        height: 0;
+        width: 0;
+    }
+
+    .document-item {
+        flex: 0 0 140px; /* Fixed width for each item */
+        scroll-snap-align: start;
+        background: var(--light);
+        padding: 0.8rem;
+        border-radius: 8px;
+        border: 1px dashed #ddd;
+        transition: all 0.2s ease;
+    }
+
+    .document-item:hover {
+        border-color: var(--accent);
+        transform: translateY(-2px);
+    }
+
+    .upload-label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .upload-icon {
+        font-size: 1.2rem;
+        color: var(--primary);
+    }
+
+    .upload-label h3 {
+        font-size: 0.8rem;
+        text-align: center;
+        margin: 0;
+    }
+
+    .upload-label p {
+        font-size: 0.65rem;
+        text-align: center;
+        margin: 0;
+    }
+
+    .document-info {
+        margin-top: 0.5rem;
+        font-size: 0.7rem;
+        text-align: center;
+    }
+
+    .document-status {
+        padding: 0.2rem 0.5rem;
+        border-radius: 12px;
+        font-size: 0.7rem;
+    }
+
+    .document-preview {
+        max-width: 100%;
+        max-height: 80px;
+        border-radius: 4px;
+    }
+
+    /* Compact submit button */
+    .document-section .submit-btn {
+        margin-top: 0.8rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        width: auto;
+        float: right;
+    }
+</style>
 </head>
 <body>
     <div class="wrapper">
@@ -602,7 +761,84 @@
     </form>
 </div>
 {% endif %}
+<style>
+    /* Update document section styles */
+    .document-section {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;  /* Reduced padding */
+        margin: 1rem;    /* Reduced margin */
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
 
+    .document-section h2 {
+        font-size: 1.2rem;  /* Smaller heading */
+        margin-bottom: 0.5rem;
+    }
+
+    .document-section p {
+        font-size: 0.85rem;  /* Smaller text */
+        margin-bottom: 0.8rem;
+    }
+
+    .document-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Smaller minimum width */
+        gap: 0.8rem;  /* Reduced gap */
+    }
+
+    .document-item {
+        padding: 1rem;  /* Reduced padding */
+        border-radius: 8px;
+        border: 1px dashed #ddd;  /* Thinner border */
+    }
+
+    .upload-label {
+        display: block;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .upload-icon {
+        font-size: 1.5rem;  /* Smaller icon */
+        margin-bottom: 0.5rem;
+    }
+
+    .upload-label h3 {
+        font-size: 0.9rem;  /* Smaller heading */
+        margin: 0.3rem 0;
+    }
+
+    .upload-label p {
+        font-size: 0.75rem;  /* Smaller text */
+        color: #666;
+    }
+
+    .document-info {
+        margin-top: 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    .document-preview {
+        max-width: 100%;
+        max-height: 120px;  /* Limit preview height */
+        margin-top: 0.8rem;
+    }
+
+    .document-status {
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        margin-top: 0.5rem;
+    }
+
+    /* Make upload button smaller */
+    .document-section .submit-btn {
+        margin-top: 1rem;
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+    }
+</style>
 <!-- Add this JavaScript before closing body tag -->
 <script>
 function previewDocument(input, containerId) {
