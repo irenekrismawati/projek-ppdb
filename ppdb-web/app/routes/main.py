@@ -1,23 +1,13 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
-from app.models import db, User, Pendaftaran, PaymentRequest  # Ganti Payment menjadi PaymentRequestfrom app.models import db, Pendaftaran, Payment
-from sqlalchemy.exc import IntegrityError
-from werkzeug.utils import secure_filename
-import os
-
-UPLOAD_FOLDER = 'app/static/uploads'
-ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+from app.models import db, User, Pendaftaran, PaymentRequest
 
 main_bp = Blueprint('main_bp', __name__)
 
-# -------- Halaman Utama (Publik) --------
-@main_bp.route("/", methods=['GET', 'POST'])
+@main_bp.route('/')
 def index():
-    return render_template("index.html")
+    """Route for the home page"""
+    return render_template('index.html')
 
 from sqlalchemy.exc import IntegrityError
 
@@ -67,33 +57,3 @@ def dashboard():
 def profile():
     pendaftaran = Pendaftaran.query.filter_by(user_id=current_user.id).first()
     return render_template('profile.html', pendaftaran=pendaftaran)
-
-@main_bp.route('/upload-documents', methods=['POST'])
-@login_required
-def upload_documents():
-    if 'ijazah' not in request.files and \
-       'kartu_keluarga' not in request.files and \
-       'akta_kelahiran' not in request.files and \
-       'foto' not in request.files:
-        flash('Tidak ada file yang dipilih', 'error')
-        return redirect(url_for('main_bp.dashboard'))
-
-    # Create upload directory if it doesn't exist
-    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-    
-    uploaded_files = []
-    
-    for field in ['ijazah', 'kartu_keluarga', 'akta_kelahiran', 'foto']:
-        file = request.files.get(field)
-        if file and file.filename and allowed_file(file.filename):
-            filename = secure_filename(f"{current_user.id}_{field}_{file.filename}")
-            filepath = os.path.join(UPLOAD_FOLDER, filename)
-            file.save(filepath)
-            uploaded_files.append(field)
-
-    if uploaded_files:
-        flash(f'Berhasil mengupload {", ".join(uploaded_files)}', 'success')
-    else:
-        flash('Gagal mengupload dokumen', 'error')
-
-    return redirect(url_for('main_bp.dashboard'))

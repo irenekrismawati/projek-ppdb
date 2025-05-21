@@ -47,5 +47,4 @@ class Sekolah(db.Model):
 class PaymentRequest(db.Model):
     __tablename__ = 'payment_requests'
     id = db.Column(db.Integer, primary_key=True)
-    # Foreign key harus merujuk ke nama tabel yang benar ('users.id')
-    approved_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+    approved_by = db.Column(db.Integer, db.ForeignKey('user.id'))
