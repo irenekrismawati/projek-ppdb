@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, render_template, redirect, url_for, request, flash, abort
+from flask import Blueprint, render_template, redirect, url_for, request, flash, abort, session
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
@@ -20,25 +20,30 @@ def admin_required(f):
 # -------- LOGIN --------
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('main_bp.profile'))
+        
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-
+        
         user = User.query.filter_by(username=username).first()
-
-        if user and check_password_hash(user.password, password):
-            if user.is_active:
-                login_user(user)
-                if user.is_admin():
-                    return redirect(url_for('admin.dashboard'))
-                return redirect(url_for('main_bp.dashboard'))
-            else:
-                flash('Akun Anda dinonaktifkan. Hubungi admin.', 'error')
+        
+        if user and user.check_password(password):
+            login_user(user)
+            next_page = request.args.get('next')
+            
+            # Redirect to profile with success message
+            flash('Login berhasil! Selamat datang kembali.', 'success')
+            return redirect(next_page or url_for('main_bp.profile'))
         else:
-            flash('Login gagal. Cek username dan password.', 'error')
-
-    return render_template('login.html')
-
+            # Store error message in session instead of flash
+            session['login_error'] = 'Login gagal. Cek username dan password.'
+            return redirect(url_for('auth_bp.login'))
+            
+    # Clear any stored error message
+    error_msg = session.pop('login_error', None)
+    return render_template('login.html', error=error_msg)
 # -------- REGISTER --------
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
