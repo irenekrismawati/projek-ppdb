@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
-from app.models import db, Pendaftaran, Payment
+from app.models import db, User, Pendaftaran, PaymentRequest  # Ganti Payment menjadi PaymentRequestfrom app.models import db, Pendaftaran, Payment
 from sqlalchemy.exc import IntegrityError
 from werkzeug.utils import secure_filename
 import os
@@ -95,45 +95,5 @@ def upload_documents():
         flash(f'Berhasil mengupload {", ".join(uploaded_files)}', 'success')
     else:
         flash('Gagal mengupload dokumen', 'error')
-
-    return redirect(url_for('main_bp.dashboard'))
-
-@main_bp.route('/upload-payment', methods=['POST'])
-@login_required
-def upload_payment():
-    if 'payment_proof' not in request.files:
-        flash('Tidak ada file yang dipilih', 'error')
-        return redirect(url_for('main_bp.dashboard'))
-
-    file = request.files['payment_proof']
-    if file.filename == '':
-        flash('Tidak ada file yang dipilih', 'error')
-        return redirect(url_for('main_bp.dashboard'))
-
-    if file and allowed_file(file.filename):
-        pendaftaran = Pendaftaran.query.filter_by(user_id=current_user.id).first()
-        if not pendaftaran:
-            flash('Data pendaftaran tidak ditemukan', 'error')
-            return redirect(url_for('main_bp.dashboard'))
-
-        filename = secure_filename(f"payment_{pendaftaran.id}_{file.filename}")
-        filepath = os.path.join(UPLOAD_FOLDER, filename)
-        file.save(filepath)
-
-        payment = Payment(
-            pendaftaran_id=pendaftaran.id,
-            amount=500000,
-            payment_method=request.form.get('payment_method'),
-            payment_proof=filename,
-            status='pending'
-        )
-        
-        try:
-            db.session.add(payment)
-            db.session.commit()
-            flash('Bukti pembayaran berhasil dikirim dan sedang diverifikasi', 'success')
-        except Exception as e:
-            db.session.rollback()
-            flash('Terjadi kesalahan saat mengirim bukti pembayaran', 'error')
 
     return redirect(url_for('main_bp.dashboard'))

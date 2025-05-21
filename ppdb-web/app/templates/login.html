@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portal PPDB Online SMK KARYA BANGSA SINTANG">
     <title>Login PPDB - SMK KARYA BANGSA SINTANG</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -48,6 +49,29 @@
             font-size: 1.2rem;
             margin-bottom: 2rem;
             opacity: 0.9;
+        }
+
+        /* Navigation */
+        .nav-menu {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 50px;
+            display: inline-flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
         }
 
         /* Main Content */
@@ -105,13 +129,16 @@
             border-radius: 8px;
             margin-bottom: 1.5rem;
             text-align: center;
-            font-size: 0.95rem;
         }
 
         .alert-error {
             background: rgba(211,47,47,0.1);
             color: var(--danger);
-            border: 1px solid var(--danger);
+        }
+
+        .alert-success {
+            background: rgba(0,137,123,0.1);
+            color: var(--success);
         }
 
         button {
@@ -128,18 +155,21 @@
         }
 
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .register-link, .home-link {
+            text-align: center;
+            margin-top: 1.5rem;
         }
 
         .register-link {
-            text-align: center;
-            margin-top: 1.5rem;
             padding-top: 1.5rem;
             border-top: 1px solid #eee;
         }
 
-        .register-link a {
+        .register-link a, .home-link a {
             color: var(--primary);
             text-decoration: none;
             font-weight: 600;
@@ -148,30 +178,39 @@
             gap: 0.5rem;
         }
 
-        .register-link a:hover {
+        .register-link a:hover, .home-link a:hover {
             color: var(--secondary);
-        }
-
-        .home-link {
-            text-align: center;
-            margin-top: 1rem;
-        }
-
-        .home-link a {
-            color: var(--dark);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .home-link a:hover {
-            color: var(--primary);
         }
 
         @media (max-width: 768px) {
             .hero h1 { font-size: 2rem; }
             .main-content { padding: 0 1rem; }
+            .login-box { padding: 1.5rem; }
+        }
+
+        /* Loading Animation */
+        .loading {
+            position: relative;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -10px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -180,6 +219,14 @@
     <div class="hero">
         <h1><i class="fas fa-school"></i> PPDB Online</h1>
         <p>SMK KARYA BANGSA SINTANG</p>
+        <nav class="nav-menu">
+            <a href="{{ url_for('main_bp.index') }}" class="nav-item">
+                <i class="fas fa-home"></i> Beranda
+            </a>
+            <a href="{{ url_for('auth_bp.register') }}" class="nav-item">
+                <i class="fas fa-user-plus"></i> Daftar
+            </a>
+        </nav>
     </div>
 
     <!-- Main Content -->
@@ -192,7 +239,7 @@
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                        {% if category in ['error', 'info'] %}
+                        {% if category in ['error', 'info', 'success'] %}
                         <div class="alert alert-{{ category }}">
                             {{ message }}
                         </div>
@@ -201,18 +248,30 @@
                 {% endif %}
             {% endwith %}
 
-            <form method="POST" action="{{ url_for('auth_bp.login') }}">
+            <form method="POST" action="{{ url_for('auth_bp.login') }}" id="loginForm">
                 <div class="form-group">
-                    <label for="username">Username:</label>
+                    <label for="username">Username</label>
                     <i class="fas fa-user"></i>
-                    <input type="text" id="username" name="username" placeholder="Masukkan username" required>
+                    <input type="text" 
+                           id="username" 
+                           name="username" 
+                           placeholder="Masukkan username" 
+                           required 
+                           autocomplete="username"
+                           minlength="3"
+                           maxlength="50">
                 </div>
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <i class="fas fa-lock"></i>
-                    <input type="password" id="password" name="password" placeholder="Masukkan password" required>
-                </div>
-                <button type="submit">
+           <div class="form-group">
+                <label for="password">Password</label>
+                <i class="fas fa-lock"></i>
+                <input type="password" 
+                    id="password" 
+                    name="password" 
+                    placeholder="Masukkan password" 
+                    required
+                    autocomplete="current-password">
+            </div>
+                    <button type="submit" id="submitBtn">
                     <i class="fas fa-sign-in-alt"></i> Login
                 </button>
             </form>
@@ -224,13 +283,15 @@
                     </a>
                 </p>
             </div>
-
-            <div class="home-link">
-                <a href="{{ url_for('main_bp.index') }}">
-                    <i class="fas fa-home"></i> Kembali ke Beranda
-                </a>
-            </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.classList.add('loading');
+            submitBtn.innerHTML = '<span class="visually-hidden">Memproses...</span>';
+        });
+    </script>
 </body>
 </html>
