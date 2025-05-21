@@ -40,14 +40,18 @@ class Sekolah(db.Model):
     email = db.Column(db.String(120))
     telepon = db.Column(db.String(20))
 
-class Payment(db.Model):
+class PaymentRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     pendaftaran_id = db.Column(db.Integer, db.ForeignKey('pendaftaran.id'), nullable=False)
-    amount = db.Column(db.Integer, nullable=False)
-    payment_method = db.Column(db.String(50), nullable=False)
+    amount = db.Column(db.Integer, nullable=False, default=500000)
+    status = db.Column(db.String(20), default='pending')  # pending, approved, rejected, paid
+    payment_method = db.Column(db.String(50))
     payment_proof = db.Column(db.String(200))
-    status = db.Column(db.String(20), default='pending')  # pending, verified, rejected
-    uploaded_at = db.Column(db.DateTime, default=datetime.utcnow)
-    verified_at = db.Column(db.DateTime)
-    
-    pendaftaran = db.relationship('Pendaftaran', backref='payments')
+    requested_at = db.Column(db.DateTime, default=datetime.utcnow)
+    approved_at = db.Column(db.DateTime)
+    paid_at = db.Column(db.DateTime)
+    admin_notes = db.Column(db.Text)
+
+    user = db.relationship('User', backref='payment_requests')
+    pendaftaran = db.relationship('Pendaftaran', backref='payment_requests')
