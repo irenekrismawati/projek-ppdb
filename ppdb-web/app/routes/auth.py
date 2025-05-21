@@ -49,47 +49,36 @@ def login():
 def register():
     if request.method == 'POST':
         try:
-            # Ambil data dari form
+            # Get form data
             username = request.form.get('username')
             password = request.form.get('password')
             email = request.form.get('email')
-            nama = request.form.get('nama')
-            nisn = request.form.get('nisn')
-            asal_sekolah = request.form.get('asal_sekolah')
-            jurusan = request.form.get('jurusan')
+            name = request.form.get('name')
 
-            # Cek apakah username atau NISN sudah ada
-            if User.query.filter_by(username=username).first():
-                flash('Username sudah terdaftar', 'error')
-                return redirect(url_for('auth_bp.register'))
-
-            if Pendaftaran.query.filter_by(nisn=nisn).first():
-                flash('NISN sudah terdaftar', 'error')
-                return redirect(url_for('auth_bp.register'))
-
-            # Buat user baru
+            # Create user
             user = User(
                 username=username,
                 email=email,
+                name=name,
                 password=generate_password_hash(password),
                 role='user'
             )
             db.session.add(user)
-            db.session.flush()  # Untuk mendapatkan ID user
+            db.session.flush()  # Get user.id
 
-            # Buat data pendaftaran
+            # Create pendaftaran
             pendaftaran = Pendaftaran(
                 user_id=user.id,
-                nama=nama,
-                nisn=nisn,
-                asal_sekolah=asal_sekolah,
-                jurusan=jurusan,
+                nama=name,  # Use the same name from user registration
+                nisn='',  # Will be filled later in the daftar form
+                asal_sekolah='',  # Will be filled later in the daftar form
+                pilihan_jurusan='',  # Will be filled later in the daftar form
                 status='pending'
             )
             db.session.add(pendaftaran)
             db.session.commit()
 
-            flash('Pendaftaran berhasil! Silakan login.', 'success')
+            flash('Registrasi berhasil! Silakan login.', 'success')
             return redirect(url_for('auth_bp.login'))
 
         except Exception as e:
