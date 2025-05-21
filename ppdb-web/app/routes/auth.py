@@ -2,6 +2,7 @@ import os
 from flask import Blueprint, render_template, redirect, url_for, request, flash, abort, session
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from app.models import db, User, Pendaftaran
 from functools import wraps
 
 from app.models import User
@@ -20,67 +21,82 @@ def admin_required(f):
 # -------- LOGIN --------
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
+    # Clear any existing flash messages when accessing login page
+    session.pop('_flashes', None)
+    
     if current_user.is_authenticated:
-        return redirect(url_for('main_bp.profile'))
-        
+        if current_user.role == 'admin':
+            return redirect(url_for('admin.dashboard'))
+        return redirect(url_for('main_bp.dashboard'))
+    
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
         
         user = User.query.filter_by(username=username).first()
         
-        if user and user.check_password(password):
+        if user and check_password_hash(user.password, password):
             login_user(user)
-            next_page = request.args.get('next')
-            
-            # Redirect to profile with success message
-            flash('Login berhasil! Selamat datang kembali.', 'success')
-            return redirect(next_page or url_for('main_bp.profile'))
+            if user.role == 'admin':
+                return redirect(url_for('admin.dashboard'))
+            return redirect(url_for('main_bp.dashboard'))
         else:
-            # Store error message in session instead of flash
-            session['login_error'] = 'Login gagal. Cek username dan password.'
-            return redirect(url_for('auth_bp.login'))
+            flash('Username atau password salah', 'error')
             
-    # Clear any stored error message
-    error_msg = session.pop('login_error', None)
-    return render_template('login.html', error=error_msg)
+    return render_template('login.html')
 # -------- REGISTER --------
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         try:
-            email = request.form.get('email')
+            # Ambil data dari form
             username = request.form.get('username')
             password = request.form.get('password')
-            name = request.form.get('name')
+            email = request.form.get('email')
+            nama = request.form.get('nama')
+            nisn = request.form.get('nisn')
+            asal_sekolah = request.form.get('asal_sekolah')
+            jurusan = request.form.get('jurusan')
 
-            # Check existing email/username
-            if User.query.filter_by(email=email).first():
-                flash('Email sudah terdaftar!', 'error')
-                return render_template('register.html')
-            
+            # Cek apakah username atau NISN sudah ada
             if User.query.filter_by(username=username).first():
-                flash('Username sudah digunakan!', 'error')
-                return render_template('register.html')
+                flash('Username sudah terdaftar', 'error')
+                return redirect(url_for('auth_bp.register'))
 
-            new_user = User(
-                email=email,
+            if Pendaftaran.query.filter_by(nisn=nisn).first():
+                flash('NISN sudah terdaftar', 'error')
+                return redirect(url_for('auth_bp.register'))
+
+            # Buat user baru
+            user = User(
                 username=username,
+                email=email,
                 password=generate_password_hash(password),
-                name=name,
-                role='user'  # Default role is user
+                role='user'
             )
+            db.session.add(user)
+            db.session.flush()  # Untuk mendapatkan ID user
 
-            db.session.add(new_user)
+            # Buat data pendaftaran
+            pendaftaran = Pendaftaran(
+                user_id=user.id,
+                nama=nama,
+                nisn=nisn,
+                asal_sekolah=asal_sekolah,
+                jurusan=jurusan,
+                status='pending'
+            )
+            db.session.add(pendaftaran)
             db.session.commit()
-            
-            flash('Registrasi berhasil! Silakan login.', 'success')
+
+            flash('Pendaftaran berhasil! Silakan login.', 'success')
             return redirect(url_for('auth_bp.login'))
 
         except Exception as e:
             db.session.rollback()
-            flash('Terjadi kesalahan saat registrasi.', 'error')
-            
+            flash(f'Terjadi kesalahan: {str(e)}', 'error')
+            return redirect(url_for('auth_bp.register'))
+
     return render_template('register.html')
 
 @auth_bp.route('/logout')

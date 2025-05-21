@@ -2,11 +2,20 @@ from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import login_required, current_user
 from app.models import db, User, Pendaftaran
 from app.routes.auth import admin_required
+from functools import wraps
 
 # Define blueprint
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
 # Add dashboard route
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_authenticated or current_user.role != 'admin':
+            return redirect(url_for('auth_bp.login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 @admin_bp.route('/dashboard')
 @login_required
 @admin_required
