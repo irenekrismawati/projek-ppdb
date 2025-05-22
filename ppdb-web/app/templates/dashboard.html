@@ -525,72 +525,6 @@
             background: rgba(255, 255, 255, 0.3);
             font-weight: 700;
         }
-
-        .document-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin: 1.5rem 0;
-        }
-
-        .document-item {
-            background: var(--light);
-            padding: 1.5rem;
-            border-radius: 8px;
-            border: 2px dashed #ddd;
-            transition: all 0.3s ease;
-            min-height: 200px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .document-item:hover {
-            border-color: var(--accent);
-            transform: translateY(-2px);
-        }
-
-        .document-item.uploaded {
-            border-style: solid;
-            border-color: var(--success);
-            background: rgba(0,137,123,0.05);
-        }
-
-        .upload-label {
-            text-align: center;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        .upload-icon {
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-
-        .upload-input {
-            display: none;
-        }
-
-        .document-info {
-            margin-top: 1rem;
-            font-size: 0.85rem;
-            text-align: center;
-        }
-
-        .form-hint {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-
-        .document-preview {
-            max-width: 100%;
-            max-height: 100px;
-            margin-top: 1rem;
-            border-radius: 4px;
-        }
     </style>
 </head>
 <body>
@@ -808,52 +742,6 @@
                 </div>
             </div>
 
-            <div class="form-section">
-                <h3><i class="fas fa-file-upload"></i> Upload Dokumen</h3>
-                <p class="form-hint">Upload dokumen dalam format PDF, JPG, atau PNG (Maks. 2MB per file)</p>
-                
-                <div class="document-grid">
-                    <!-- Ijazah -->
-                    <div class="document-item" id="ijazah-container">
-                        <label class="upload-label">
-                            <i class="fas fa-file-alt upload-icon"></i>
-                            <h3>Ijazah</h3>
-                            <p>PDF atau Gambar</p>
-                            <input type="file" name="ijazah" class="upload-input" 
-                                   accept=".pdf,.jpg,.jpeg,.png" 
-                                   onchange="previewDocument(this, 'ijazah-container')" required>
-                        </label>
-                        <div class="document-info"></div>
-                    </div>
-
-                    <!-- Kartu Keluarga -->
-                    <div class="document-item" id="kk-container">
-                        <label class="upload-label">
-                            <i class="fas fa-users upload-icon"></i>
-                            <h3>Kartu Keluarga</h3>
-                            <p>PDF atau Gambar</p>
-                            <input type="file" name="kartu_keluarga" class="upload-input" 
-                                   accept=".pdf,.jpg,.jpeg,.png" 
-                                   onchange="previewDocument(this, 'kk-container')" required>
-                        </label>
-                        <div class="document-info"></div>
-                    </div>
-
-                    <!-- Akta Kelahiran -->
-                    <div class="document-item" id="akta-container">
-                        <label class="upload-label">
-                            <i class="fas fa-certificate upload-icon"></i>
-                            <h3>Akta Kelahiran</h3>
-                            <p>PDF atau Gambar</p>
-                            <input type="file" name="akta_kelahiran" class="upload-input" 
-                                   accept=".pdf,.jpg,.jpeg,.png" 
-                                   onchange="previewDocument(this, 'akta-container')" required>
-                        </label>
-                        <div class="document-info"></div>
-                    </div>
-                </div>
-            </div>
-
             <button type="submit" class="submit-btn">
                 <i class="fas fa-paper-plane"></i> Kirim Pendaftaran
             </button>
@@ -865,74 +753,13 @@
             {% for p in pendaftarans %}
                 {% if loop.first %}
                     {% if p.status == 'approved' %}
-                        <div class="notification notification-approved">
-                            <i class="fas fa-check-circle"></i>
-                            <div>
-                                <h3>Selamat! Pendaftaran Anda Diterima</h3>
-                                <p>Anda telah diterima di jurusan {{ p.pilihan_jurusan }}. Silakan lengkapi berkas pendaftaran.</p>
-                            </div>
+                    <div class="notification notification-approved">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h3>Selamat! Pendaftaran Anda Diterima</h3>
+                            <p>Anda telah diterima di jurusan {{ p.pilihan_jurusan }}. Silakan lengkapi berkas pendaftaran.</p>
                         </div>
-
-                        <!-- Payment Section -->
-                        {% if not p.payment_status %}
-                        <div class="payment-section">
-                            <h3><i class="fas fa-money-bill"></i> Pembayaran PPDB</h3>
-                            <div class="payment-info">
-                                <div class="payment-amount">
-                                    <h4>Total Pembayaran</h4>
-                                    <p class="amount">Rp 500.000</p>
-                                    <small>Biaya Pendaftaran PPDB</small>
-                                </div>
-                                <div class="payment-details">
-                                    <h4>Metode Pembayaran</h4>
-                                    <div class="payment-methods">
-                                        <div class="payment-method">
-                                            <i class="fas fa-university"></i>
-                                            <p>Transfer Bank</p>
-                                            <p class="bank-details">Bank BRI: 1234-5678-9012-3456</p>
-                                            <p class="bank-details">a.n. SMK KARYA BANGSA SINTANG</p>
-                                        </div>
-                                    </div>
-                                    <div class="payment-instructions">
-                                        <h4>Cara Pembayaran:</h4>
-                                        <ol>
-                                            <li>Transfer sesuai nominal ke rekening di atas</li>
-                                            <li>Simpan bukti transfer/pembayaran</li>
-                                            <li>Upload bukti pembayaran pada form di bawah</li>
-                                            <li>Tunggu verifikasi dari admin (1x24 jam)</li>
-                                        </ol>
-                                    </div>
-                                </div>
-                                <form method="POST" action="{{ url_for('main_bp.submit_payment') }}" enctype="multipart/form-data" class="payment-form">
-                                    <div class="form-group">
-                                        <label>Upload Bukti Pembayaran</label>
-                                        <input type="file" name="payment_proof" accept=".jpg,.jpeg,.png,.pdf" required>
-                                        <p class="file-hint">Format: JPG, PNG, atau PDF (Max 2MB)</p>
-                                    </div>
-                                    <button type="submit" class="submit-btn">
-                                        <i class="fas fa-upload"></i> Upload Bukti Pembayaran
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                        {% elif p.payment_status == 'pending' %}
-                        <div class="notification notification-warning">
-                            <i class="fas fa-clock"></i>
-                            <div>
-                                <h3>Pembayaran Sedang Diverifikasi</h3>
-                                <p>Bukti pembayaran Anda sedang dalam proses verifikasi. Mohon tunggu konfirmasi dari admin.</p>
-                            </div>
-                        </div>
-                        {% elif p.payment_status == 'verified' %}
-                        <div class="notification notification-success">
-                            <i class="fas fa-check-circle"></i>
-                            <div>
-                                <h3>Pembayaran Berhasil</h3>
-                                <p>Pembayaran Anda telah dikonfirmasi. Silakan melanjutkan proses pendaftaran.</p>
-                            </div>
-                        </div>
-                        {% endif %}
-
+                    </div>
                     {% elif p.status == 'rejected' %}
                     <div class="notification notification-rejected">
                         <i class="fas fa-times-circle"></i>
@@ -953,15 +780,18 @@
                 {% endif %}
             {% endfor %}
 
-            <!-- Add this code block for payment section -->
-            {% if pendaftarans and pendaftarans[0].status == 'approved' %}
-            <div class="document-section">
-                <h2><i class="fas fa-file-upload"></i> Upload Dokumen</h2>
-                <p>Silakan upload dokumen yang diperlukan:</p>
-                
-                <form method="POST" action="{{ url_for('main_bp.upload_documents') }}" enctype="multipart/form-data">
-                    <div class="document-grid">
-                        <!-- Ijazah -->
+            <!-- Replace the payment section with this code -->
+            {% if pendaftarans %}
+                {% set pendaftaran = pendaftarans[0] %}
+                {% if pendaftaran.status == 'approved' %}
+                    <!-- Document Upload Section -->
+                    <div class="document-section">
+                        <h2><i class="fas fa-file-upload"></i> Upload Dokumen</h2>
+                        <p>Silakan upload dokumen yang diperlukan:</p>
+                        
+                        <form method="POST" action="{{ url_for('main_bp.upload_documents') }}" enctype="multipart/form-data">
+                            <div class="document-grid">
+                                <!-- Ijazah -->
     <div class="document-item" id="ijazah-container">
         <label class="upload-label">
             <i class="fas fa-file-alt upload-icon"></i>
@@ -993,80 +823,72 @@
         </label>
         <div class="document-info"></div>
     </div>
+                            </div>
+                            <button type="submit" class="submit-btn">
+                                <i class="fas fa-cloud-upload-alt"></i> Upload Dokumen
+                            </button>
+                        </form>
                     </div>
-                    <button type="submit" class="submit-btn">
-                        <i class="fas fa-cloud-upload-alt"></i> Upload Dokumen
-                    </button>
-                </form>
-            </div>
-            {% endif %}
 
-            <!-- Replace the duplicate payment section at the bottom with this code -->
-            {% for p in pendaftarans %}
-                {% if loop.first %}
-                    {% if p.status == 'approved' %}
-                        <!-- Payment section for approved students -->
-                        {% if not p.payment_status %}
-                        <div class="payment-section">
-                            <h3><i class="fas fa-money-bill"></i> Pembayaran PPDB</h3>
-                            <div class="payment-info">
-                                <div class="payment-amount">
-                                    <h4>Total Pembayaran</h4>
-                                    <p class="amount">Rp 500.000</p>
-                                    <small>Biaya Pendaftaran PPDB</small>
-                                </div>
-                                <div class="payment-details">
-                                    <h4>Metode Pembayaran</h4>
-                                    <div class="payment-methods">
-                                        <div class="payment-method">
-                                            <i class="fas fa-university"></i>
-                                            <p>Transfer Bank</p>
-                                            <p class="bank-details">Bank BRI: 1234-5678-9012-3456</p>
-                                            <p class="bank-details">a.n. SMK KARYA BANGSA SINTANG</p>
-                                        </div>
-                                    </div>
-                                    <div class="payment-instructions">
-                                        <h4>Cara Pembayaran:</h4>
-                                        <ol>
-                                            <li>Transfer sesuai nominal ke rekening di atas</li>
-                                            <li>Simpan bukti transfer/pembayaran</li>
-                                            <li>Upload bukti pembayaran pada form di bawah</li>
-                                            <li>Tunggu verifikasi dari admin (1x24 jam)</li>
-                                        </ol>
+                    <!-- Payment Section -->
+                    {% if not pendaftaran.payment_status %}
+                    <div class="payment-section">
+                        <h3><i class="fas fa-money-bill"></i> Pembayaran PPDB</h3>
+                        <div class="payment-info">
+                            <div class="payment-amount">
+                                <h4>Total Pembayaran</h4>
+                                <p class="amount">Rp 500.000</p>
+                            </div>
+                            <div class="payment-details">
+                                <h4>Metode Pembayaran</h4>
+                                <div class="payment-methods">
+                                    <div class="payment-method">
+                                        <i class="fas fa-university"></i>
+                                        <p>Transfer Bank</p>
+                                        <p class="bank-details">Bank BRI: 1234-5678-9012-3456</p>
+                                        <p class="bank-details">a.n. SMA Negeri 1 Contoh</p>
                                     </div>
                                 </div>
-                                <form method="POST" action="{{ url_for('main_bp.submit_payment') }}" enctype="multipart/form-data" class="payment-form">
-                                    <div class="form-group">
-                                        <label>Upload Bukti Pembayaran</label>
-                                        <input type="file" name="payment_proof" accept=".jpg,.jpeg,.png,.pdf" required>
-                                        <p class="file-hint">Format: JPG, PNG, atau PDF (Max 2MB)</p>
-                                    </div>
-                                    <button type="submit" class="submit-btn">
-                                        <i class="fas fa-upload"></i> Upload Bukti Pembayaran
-                                    </button>
-                                </form>
+                                <div class="payment-instructions">
+                                    <h4>Cara Pembayaran:</h4>
+                                    <ol>
+                                        <li>Transfer sesuai nominal ke rekening di atas</li>
+                                        <li>Upload bukti pembayaran pada form di bawah</li>
+                                        <li>Tunggu verifikasi dari admin (1x24 jam)</li>
+                                    </ol>
+                                </div>
                             </div>
+                            <form method="POST" action="{{ url_for('main_bp.submit_payment') }}" enctype="multipart/form-data" class="payment-form">
+                                <div class="form-group">
+                                    <label>Upload Bukti Pembayaran</label>
+                                    <input type="file" name="payment_proof" accept=".jpg,.jpeg,.png,.pdf" required>
+                                    <p class="file-hint">Format: JPG, PNG, atau PDF (Max 2MB)</p>
+                                </div>
+                                <button type="submit" class="submit-btn">
+                                    <i class="fas fa-upload"></i> Upload Bukti Pembayaran
+                                </button>
+                            </form>
                         </div>
-                        {% elif p.payment_status == 'pending' %}
-                        <div class="notification notification-warning">
-                            <i class="fas fa-clock"></i>
-                            <div>
-                                <h3>Pembayaran Sedang Diverifikasi</h3>
-                                <p>Bukti pembayaran Anda sedang dalam proses verifikasi. Mohon tunggu konfirmasi dari admin.</p>
-                            </div>
+                    </div>
+                    {% elif pendaftaran.payment_status == 'pending' %}
+                    <div class="notification notification-warning">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h3>Pembayaran Sedang Diverifikasi</h3>
+                            <p>Bukti pembayaran Anda sedang dalam proses verifikasi. Mohon tunggu konfirmasi dari admin.</p>
                         </div>
-                        {% elif p.payment_status == 'verified' %}
-                        <div class="notification notification-success">
-                            <i class="fas fa-check-circle"></i>
-                            <div>
-                                <h3>Pembayaran Berhasil</h3>
-                                <p>Pembayaran Anda telah dikonfirmasi. Silakan melanjutkan proses pendaftaran.</p>
-                            </div>
+                    </div>
+                    {% elif pendaftaran.payment_status == 'verified' %}
+                    <div class="notification notification-success">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h3>Pembayaran Berhasil</h3>
+                            <p>Pembayaran Anda telah dikonfirmasi. Silakan melanjutkan proses pendaftaran.</p>
                         </div>
-                        {% endif %}
+                    </div>
                     {% endif %}
                 {% endif %}
-            {% endfor %}
+            {% endif %}
         </div>
     </div>
 <!-- Add this JavaScript before closing body tag -->
@@ -1075,14 +897,14 @@ function previewDocument(input, containerId) {
     const container = document.getElementById(containerId);
     const infoDiv = container.querySelector('.document-info');
     const file = input.files[0];
-    
+
     if (file) {
         const fileName = file.name;
         const fileSize = (file.size / 1024 / 1024).toFixed(2);
         
         container.classList.add('uploaded');
         infoDiv.innerHTML = `
-            <div class="document-status">
+            <div class="document-status status-uploaded">
                 <i class="fas fa-check-circle"></i> File dipilih
             </div>
             <p><strong>Nama:</strong> ${fileName}</p>
@@ -1092,23 +914,23 @@ function previewDocument(input, containerId) {
         if (file.type.startsWith('image/')) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                const preview = container.querySelector('.document-preview');
-                if (preview) {
-                    preview.remove();
-                }
                 const img = document.createElement('img');
                 img.src = e.target.result;
                 img.className = 'document-preview';
                 container.appendChild(img);
             }
             reader.readAsDataURL(file);
+        } else {
+            const fileIcon = document.createElement('i');
+            fileIcon.className = 'fas fa-file-upload';
+            container.appendChild(fileIcon);
         }
     } else {
         container.classList.remove('uploaded');
         infoDiv.innerHTML = '';
-        const preview = container.querySelector('.document-preview');
-        if (preview) {
-            preview.remove();
+        const existingImg = container.querySelector('img.document-preview');
+        if (existingImg) {
+            existingImg.remove();
         }
     }
 }

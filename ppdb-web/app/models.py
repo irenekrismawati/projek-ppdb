@@ -3,7 +3,6 @@ from flask_login import UserMixin
 from app import db
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-import os
 
 class User(UserMixin, db.Model):
     __tablename__ = 'user'
@@ -50,6 +49,7 @@ class Pendaftaran(db.Model):
     pilihan_jurusan = db.Column(db.String(50), nullable=False)
     status = db.Column(db.String(20), default='pending')
     tanggal_daftar = db.Column(db.DateTime, default=datetime.utcnow)
+
     
 class Sekolah(db.Model):
     __tablename__ = 'sekolah'
@@ -68,10 +68,3 @@ class PaymentRequest(db.Model):
     __tablename__ = 'payment_requests'
     id = db.Column(db.Integer, primary_key=True)
     approved_by = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-class Config:
-    # ...existing code...
-    
-    # Konfigurasi folder upload
-    UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app/static/uploads')
-    MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # Max 16MB

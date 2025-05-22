@@ -105,3 +105,50 @@ def upload_documents():
 
     return redirect(url_for('main_bp.dashboard'))
 
+@main_bp.route('/submit-payment', methods=['POST'])
+@login_required
+def submit_payment():
+    if 'payment_proof' not in request.files:
+        flash('Tidak ada file yang diunggah', 'error')
+        return redirect(url_for('main_bp.dashboard'))
+    
+    file = request.files['payment_proof']
+    if file.filename == '':
+        flash('Tidak ada file yang dipilih', 'error')
+        return redirect(url_for('main_bp.dashboard'))
+        
+    if file and allowed_file(file.filename, {'pdf', 'png', 'jpg', 'jpeg'}):
+        try:
+            # Get user's pendaftaran
+            pendaftaran = Pendaftaran.query.filter_by(user_id=current_user.id).first()
+            if not pendaftaran:
+                flash('Data pendaftaran tidak ditemukan', 'error')
+                return redirect(url_for('main_bp.dashboard'))
+            
+            # Create uploads/payments directory if it doesn't exist
+            upload_dir = os.path.join(current_app.config['UPLOAD_FOLDER'], 'payments')
+            os.makedirs(upload_dir, exist_ok=True)
+            
+            # Save payment proof file
+            filename = secure_filename(f'payment_{pendaftaran.id}_{file.filename}')
+            filepath = os.path.join(upload_dir, filename)
+            file.save(filepath)
+            
+            # Update payment status
+            pendaftaran.payment_proof = filename
+            pendaftaran.payment_status = 'pending'
+            pendaftaran.payment_date = datetime.now()
+            
+            db.session.commit()
+            
+            flash('Bukti pembayaran berhasil diunggah dan sedang diverifikasi', 'success')
+            
+        except Exception as e:
+            current_app.logger.error(f"Payment upload error: {str(e)}")
+            flash('Terjadi kesalahan saat mengunggah bukti pembayaran', 'error')
+            
+    else:
+        flash('Format file tidak diizinkan', 'error')
+        
+    return redirect(url_for('main_bp.dashboard'))
+

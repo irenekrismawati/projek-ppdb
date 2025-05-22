@@ -247,83 +247,6 @@
             transform: translateY(-2px);
         }
 
-        /* Modal Styles */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-}
-
-.modal-content {
-    background-color: var(--white);
-    margin: 5% auto;
-    padding: 2rem;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 1200px;
-    max-height: 80vh;
-    overflow-y: auto;
-}
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.close:hover {
-    color: var(--dark);
-}
-
-.document-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-}
-
-.document-card {
-    background: var(--light-bg);
-    padding: 1.5rem;
-    border-radius: 8px;
-    text-align: center;
-}
-
-.document-preview {
-    margin: 1rem 0;
-    min-height: 200px;
-    background: var(--white);
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-
-.document-preview img, 
-.document-preview iframe {
-    max-width: 100%;
-    max-height: 300px;
-    object-fit: contain;
-}
-
-.document-card h3 {
-    margin-bottom: 1rem;
-    color: var(--dark);
-}
-
-.document-card .btn {
-    margin-top: 1rem;
-}
-
         @media (max-width: 768px) {
             .wrapper {
                 flex-direction: column;
@@ -429,7 +352,6 @@
                             <th>Jurusan</th>
                             <th>Status</th>
                             <th>Tanggal</th>
-                            <th>Dokumen</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -445,11 +367,6 @@
                                 {{ p.status }}
                             </td>
                             <td>{{ p.tanggal_daftar.strftime('%d-%m-%Y') }}</td>
-                            <td>
-                                <button class="btn btn-primary" onclick="showDocuments('{{ p.id }}')">
-                                    <i class="fas fa-file"></i> Lihat Dokumen
-                                </button>
-                            </td>
                             <td>
                                 {% if p.status == 'pending' %}
                                 <a href="{{ url_for('admin.approve_pendaftaran', id=p.id) }}" class="btn btn-approve">
@@ -470,36 +387,6 @@
             </div>
         </div>
     </div>
-
-    <div id="documentModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2><i class="fas fa-file-alt"></i> Dokumen Pendaftar</h2>
-        <div class="document-grid">
-            <div class="document-card">
-                <h3><i class="fas fa-file-alt"></i> Ijazah</h3>
-                <div id="ijazahPreview" class="document-preview"></div>
-                <a id="ijazahDownload" class="btn btn-primary" download>
-                    <i class="fas fa-download"></i> Download
-                </a>
-            </div>
-            <div class="document-card">
-                <h3><i class="fas fa-users"></i> Kartu Keluarga</h3>
-                <div id="kkPreview" class="document-preview"></div>
-                <a id="kkDownload" class="btn btn-primary" download>
-                    <i class="fas fa-download"></i> Download
-                </a>
-            </div>
-            <div class="document-card">
-                <h3><i class="fas fa-certificate"></i> Akta Kelahiran</h3>
-                <div id="aktaPreview" class="document-preview"></div>
-                <a id="aktaDownload" class="btn btn-primary" download>
-                    <i class="fas fa-download"></i> Download
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
 
     <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -540,69 +427,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-
-// Get modal elements
-const modal = document.getElementById('documentModal');
-const closeBtn = document.getElementsByClassName('close')[0];
-
-// Close modal when clicking (X)
-closeBtn.onclick = function() {
-    modal.style.display = "none";
-}
-
-// Close modal when clicking outside
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
-
-function showDocuments(pendaftaranId) {
-    // Show modal
-    modal.style.display = "block";
-    
-    // Fetch documents from server
-    fetch(`/admin/documents/${pendaftaranId}`)
-        .then(response => response.json())
-        .then(data => {
-            // Update previews and download links
-            updateDocumentPreview('ijazah', data.ijazah);
-            updateDocumentPreview('kk', data.kartu_keluarga);
-            updateDocumentPreview('akta', data.akta_kelahiran);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Gagal memuat dokumen');
-        });
-}
-
-function updateDocumentPreview(type, url) {
-    if (!url) {
-        document.getElementById(`${type}Preview`).innerHTML = 
-            '<p>Dokumen belum diunggah</p>';
-        document.getElementById(`${type}Download`).style.display = 'none';
-        return;
-    }
-
-    const preview = document.getElementById(`${type}Preview`);
-    const download = document.getElementById(`${type}Download`);
-    
-    // Update download link
-    download.href = url;
-    download.style.display = 'inline-flex';
-
-    // Create preview based on file type
-    if (url.match(/\.(jpg|jpeg|png|gif)$/i)) {
-        preview.innerHTML = `<img src="${url}" alt="${type}">`;
-    } else if (url.match(/\.pdf$/i)) {
-        preview.innerHTML = `
-            <iframe src="${url}#toolbar=0" width="100%" height="300px">
-                This browser does not support PDFs.
-            </iframe>`;
-    } else {
-        preview.innerHTML = '<p>Preview tidak tersedia</p>';
-    }
-}
 </script>
 </body>
 </html>
