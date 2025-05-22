@@ -43,7 +43,7 @@ def create_app():
         
         # Register blueprints - main_bp first to handle root URL
         app.register_blueprint(main_bp)
-        app.register_blueprint(auth_bp)
+        app.register_blueprint(auth_bp, url_prefix='/auth')
         app.register_blueprint(admin_bp)
 
     return app

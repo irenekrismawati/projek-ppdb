@@ -167,6 +167,25 @@
             color: var(--secondary);
         }
 
+        .form-group input:invalid {
+            border-color: var(--danger);
+        }
+
+        .form-group input:invalid:focus {
+            box-shadow: 0 0 0 3px rgba(211,47,47,0.1);
+        }
+
+        .form-group input:valid {
+            border-color: var(--success);
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 0.25rem;
+            font-size: 0.75rem;
+            color: var(--danger);
+        }
+
         @media (max-width: 768px) {
             .hero h1 { font-size: 2rem; }
             .main-content { padding: 0 1rem; }
@@ -195,6 +214,7 @@
                 {% endif %}
             {% endwith %}
 
+            <!-- Update bagian form -->
             <form method="POST" action="{{ url_for('auth_bp.register') }}">
                 <div class="form-group">
                     <label for="name">Nama Lengkap:</label>
@@ -216,8 +236,13 @@
                     <i class="fas fa-lock"></i>
                     <input type="password" id="password" name="password" placeholder="Masukkan password" required>
                 </div>
+                <div class="form-group">
+                    <label for="confirm_password">Konfirmasi Password:</label>
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Masukkan ulang password" required>
+                </div>
                 <button type="submit">
-                    <i class="fas fa-user-plus"></i> Daftar
+                    <i class="fas fa-user-plus"></i> Buat Akun
                 </button>
             </form>
 
@@ -230,5 +255,19 @@
             </div>
         </div>
     </div>
+
+    <!-- Add JavaScript validation -->
+    <script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm_password').value;
+        
+        if (password !== confirmPassword) {
+            e.preventDefault();
+            alert('Password dan konfirmasi password harus sama');
+            return false;
+        }
+    });
+    </script>
 </body>
 </html>

@@ -6,6 +6,7 @@
     <title>Dashboard PPDB</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* Root Variables */
         :root {
             --primary: #1a237e;
             --secondary: #0d47a1;
@@ -18,6 +19,7 @@
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
         }
 
+        /* Layout */
         * {
             margin: 0;
             padding: 0;
@@ -28,476 +30,211 @@
         body {
             background: var(--light);
             min-height: 100vh;
+            position: relative;
         }
 
         .wrapper {
             display: flex;
             min-height: 100vh;
+            width: 100%;
         }
 
         /* Sidebar */
         .sidebar {
-            width: 280px;
+            width: 240px;
             background: var(--gradient);
             color: white;
-            padding: 2rem;
+            padding: 1.5rem;
             position: fixed;
             height: 100vh;
-        }
-
-        .sidebar-header {
-            text-align: center;
-            padding-bottom: 2rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .sidebar-header h2 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .nav-menu {
-            margin-top: 2rem;
-        }
-
-        .nav-item {
-            display: block;
-            padding: 1rem;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .nav-item:hover {
-            background: rgba(255,255,255,0.1);
-            transform: translateX(5px);
-        }
-
-        .nav-item i {
-            width: 25px;
+            overflow-y: auto;
+            z-index: 1000;
         }
 
         /* Main Content */
         .main-content {
             flex: 1;
-            margin-left: 280px;
-            padding: 2rem;
+            margin-left: 240px;
+            padding: 1.5rem;
+            width: calc(100% - 240px);
+            min-height: 100vh;
+            position: relative;
         }
 
-        .header {
+        /* Card Styles */
+        .card {
             background: white;
-            padding: 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
-        }
-
-        .notification {
-            padding: 1.5rem;
-            border-radius: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
             margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
+            padding: 1.5rem;
+        }
+
+        /* Document Section */
+        .document-section {
             background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem auto;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            width: calc(100% - 240px);
+            margin-left: 240px;
+            position: relative;
+        }
+
+        .document-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            padding: 1rem 0;
+        }
+
+        .document-item {
+            background: var(--light);
+            padding: 0.8rem;
+            border-radius: 8px;
+            border: 1px dashed #ddd;
+            min-height: 150px;
             transition: all 0.3s ease;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-        .notification:hover {
-            transform: translateY(-5px);
+        .document-item:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
         }
 
-        .notification i {
-            font-size: 2rem;
+        .document-item.uploaded {
+            border-color: var(--success);
+            background: rgba(0, 137, 123, 0.05);
         }
 
-        .notification-approved { border-left: 5px solid var(--success); }
-        .notification-rejected { border-left: 5px solid var(--danger); }
-        .notification-pending { border-left: 5px solid var(--warning); }
+        /* Upload Elements */
+        .upload-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            width: 100%;
+        }
 
-        .status-approved { color: var(--success); }
-        .status-rejected { color: var(--danger); }
-        .status-pending { color: var(--warning); }
+        .upload-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
 
+        .upload-label h3 {
+            font-size: 0.85rem;
+            margin: 0.2rem 0;
+            color: var(--dark);
+        }
+
+        .upload-label p {
+            font-size: 0.7rem;
+            color: #666;
+            margin: 0;
+        }
+
+        .upload-input {
+            display: none;
+        }
+
+        /* Table Styles */
         table {
             width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
             overflow: hidden;
         }
 
         th, td {
-            padding: 1rem;
+            padding: 0.8rem;
             text-align: left;
+            border-bottom: 1px solid #eee;
         }
 
         th {
             background: var(--gradient);
             color: white;
+            font-weight: 500;
         }
 
-        tr:nth-child(even) {
-            background: rgba(0,0,0,0.02);
-        }
-
-        tr:hover {
-            background: rgba(0,0,0,0.05);
-        }
-
-        .detail-btn {
+        /* Button Styles */
+        .submit-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            text-decoration: none;
-            color: white;
-            background: var(--gradient);
-            transition: all 0.3s ease;
+            float: right;
+            margin-top: 1rem;
         }
 
-        .detail-btn:hover {
+        .submit-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
+        /* Fix JavaScript preview */
+        .document-info {
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px dashed #eee;
+            font-size: 0.75rem;
+            text-align: center;
+        }
+
+        .document-preview {
+            max-width: 100%;
+            max-height: 80px;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            object-fit: cover;
+        }
+
+        .document-status {
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        .document-status i {
+            margin-right: 0.25rem;
+        }
+
+        /* Responsive Design */
         @media (max-width: 768px) {
             .sidebar {
                 width: 100%;
-                height: auto;
                 position: relative;
+                height: auto;
             }
-            .main-content {
+            
+            .main-content, 
+            .document-section {
                 margin-left: 0;
+                width: 100%;
             }
+
             .wrapper {
                 flex-direction: column;
             }
         }
-        /* Add to existing CSS styles */
-.form-container {
-    padding: 2rem;
-}
-
-.form-section {
-    background: var(--light);
-    padding: 1.5rem;
-    border-radius: 10px;
-    margin-bottom: 2rem;
-}
-
-.form-section h3 {
-    color: var(--secondary);
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.form-group {
-    margin-bottom: 1rem;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: var(--dark);
-    font-weight: 500;
-}
-
-.required::after {
-    content: '*';
-    color: var(--danger);
-    margin-left: 4px;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 100%;
-    padding: 0.8rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    border-color: var(--accent);
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0,188,212,0.1);
-}
-
-.submit-btn {
-    background: var(--gradient);
-    color: white;
-    border: none;
-    padding: 1rem 2rem;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    width: 100%;
-    transition: all 0.3s ease;
-}
-
-.submit-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-}
     </style>
-<style>
-    /* Add these new styles */
-    .document-section {
-        background: white;
-        border-radius: 15px;
-        padding: 2rem;
-        margin-bottom: 2rem;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-
-    .document-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 1.5rem;
-    }
-
-    .document-item {
-        background: var(--light);
-        padding: 1.5rem;
-        border-radius: 10px;
-        border: 2px dashed #ddd;
-        transition: all 0.3s ease;
-    }
-
-    .document-item:hover {
-        border-color: var(--accent);
-    }
-
-    .document-item.uploaded {
-        border-color: var(--success);
-        border-style: solid;
-    }
-
-    .upload-label {
-        display: block;
-        cursor: pointer;
-        text-align: center;
-    }
-
-    .upload-icon {
-        font-size: 2rem;
-        color: var(--primary);
-        margin-bottom: 1rem;
-    }
-
-    .upload-input {
-        display: none;
-    }
-
-    .document-preview {
-        max-width: 100%;
-        margin-top: 1rem;
-    }
-
-    .document-info {
-        margin-top: 1rem;
-        font-size: 0.9rem;
-        color: #666;
-    }
-
-    .document-status {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        font-size: 0.9rem;
-        margin-top: 1rem;
-    }
-
-    .status-uploaded {
-        background: rgba(0,137,123,0.1);
-        color: var(--success);
-    }
-
-    .status-pending {
-        background: rgba(255,215,0,0.1);
-        color: var(--warning);
-    }
-</style>
-<style>
-    /* Update document section styles */
-    .document-section {
-        background: white;
-        border-radius: 12px;
-        padding: 1rem;  /* Reduced padding */
-        margin: 0.8rem;  /* Reduced margin */
-    }
-
-    .document-section h2 {
-        font-size: 1rem;  /* Smaller title */
-        margin-bottom: 0.3rem;
-        color: var(--primary);
-    }
-
-    .document-section p {
-        font-size: 0.75rem;  /* Smaller description text */
-        margin-bottom: 0.5rem;
-        color: #666;
-    }
-
-    .document-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Even smaller grid items */
-        gap: 0.6rem;  /* Smaller gap */
-        margin-top: 0.5rem;  /* Reduced top margin */
-    }
-
-    .document-item {
-        padding: 0.8rem;  /* Smaller padding */
-    }
-
-    .upload-label h3 {
-        font-size: 0.8rem;  /* Smaller heading */
-        margin: 0.2rem 0;
-    }
-
-    .upload-label p {
-        font-size: 0.7rem;  /* Smaller hint text */
-    }
-
-    .upload-icon {
-        font-size: 1.2rem;  /* Smaller icon */
-        margin-bottom: 0.3rem;
-    }
-
-    /* Adjust button size */
-    .document-section .submit-btn {
-        margin-top: 0.8rem;
-        padding: 0.5rem 1rem;
-        font-size: 0.8rem;
-    }
-</style>
-<style>
-    /* Compact document section styles */
-    .document-section {
-        background: white;
-        border-radius: 10px;
-        padding: 1rem;
-        margin: 1rem 0;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    }
-
-    .document-section h2 {
-        font-size: 0.9rem;
-        color: var(--primary);
-        margin-bottom: 0.3rem;
-        display: flex;
-        align-items: center;
-        gap: 0.3rem;
-    }
-
-    .document-section p {
-        font-size: 0.75rem;
-        color: #666;
-        margin-bottom: 0.5rem;
-    }
-
-    /* Horizontal scrolling document grid */
-    .document-grid {
-        display: flex;
-        overflow-x: auto;
-        gap: 0.5rem;
-        padding: 0.5rem 0;
-        scroll-snap-type: x mandatory;
-    }
-
-    /* Hide scrollbar but keep functionality */
-    .document-grid::-webkit-scrollbar {
-        height: 0;
-        width: 0;
-    }
-
-    .document-item {
-        flex: 0 0 140px; /* Fixed width for each item */
-        scroll-snap-align: start;
-        background: var(--light);
-        padding: 0.8rem;
-        border-radius: 8px;
-        border: 1px dashed #ddd;
-        transition: all 0.2s ease;
-    }
-
-    .document-item:hover {
-        border-color: var(--accent);
-        transform: translateY(-2px);
-    }
-
-    .upload-label {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.3rem;
-    }
-
-    .upload-icon {
-        font-size: 1.2rem;
-        color: var(--primary);
-    }
-
-    .upload-label h3 {
-        font-size: 0.8rem;
-        text-align: center;
-        margin: 0;
-    }
-
-    .upload-label p {
-        font-size: 0.65rem;
-        text-align: center;
-        margin: 0;
-    }
-
-    .document-info {
-        margin-top: 0.5rem;
-        font-size: 0.7rem;
-        text-align: center;
-    }
-
-    .document-status {
-        padding: 0.2rem 0.5rem;
-        border-radius: 12px;
-        font-size: 0.7rem;
-    }
-
-    .document-preview {
-        max-width: 100%;
-        max-height: 80px;
-        border-radius: 4px;
-    }
-
-    /* Compact submit button */
-    .document-section .submit-btn {
-        margin-top: 0.8rem;
-        padding: 0.5rem 1rem;
-        font-size: 0.8rem;
-        width: auto;
-        float: right;
-    }
-</style>
 </head>
 <body>
     <div class="wrapper">
@@ -507,7 +244,7 @@
                 <h2><i class="fas fa-school"></i> PPDB</h2>
                 <p>{{ current_user.name }}</p>
             </div>
-           <!-- Update the profile link in the sidebar -->
+            <!-- Update the nav-menu section -->
             <nav class="nav-menu">
                 <a href="{{ url_for('main_bp.dashboard') }}" class="nav-item active">
                     <i class="fas fa-tachometer-alt"></i> Dashboard
@@ -541,10 +278,6 @@
                     <div class="form-group">
                         <label class="required">Nama Lengkap</label>
                         <input type="text" name="nama" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="required">NISN</label>
-                        <input type="text" name="nisn" required>
                     </div>
                 </div>
                 <div class="form-row">
@@ -685,160 +418,55 @@
             {% else %}
             <p>Belum ada pendaftaran.</p>
             {% endif %}
+
+            {% if pendaftarans and pendaftarans[0].status == 'approved' %}
+            <div class="document-section">
+                <h2><i class="fas fa-file-upload"></i> Upload Dokumen</h2>
+                <p>Silakan upload dokumen yang diperlukan:</p>
+                
+                <form method="POST" action="{{ url_for('main_bp.upload_documents') }}" enctype="multipart/form-data">
+                    <div class="document-grid">
+                        <!-- Ijazah -->
+    <div class="document-item" id="ijazah-container">
+        <label class="upload-label">
+            <i class="fas fa-file-alt upload-icon"></i>
+            <h3>Ijazah</h3>
+            <p>PDF atau Gambar</p>
+            <input type="file" name="ijazah" class="upload-input" accept=".pdf,.jpg,.jpeg,.png" onchange="previewDocument(this, 'ijazah-container')">
+        </label>
+        <div class="document-info"></div>
+    </div>
+
+    <!-- Kartu Keluarga -->
+    <div class="document-item" id="kk-container">
+        <label class="upload-label">
+            <i class="fas fa-users upload-icon"></i>
+            <h3>Kartu Keluarga</h3>
+            <p>PDF atau Gambar</p>
+            <input type="file" name="kartu_keluarga" class="upload-input" accept=".pdf,.jpg,.jpeg,.png" onchange="previewDocument(this, 'kk-container')">
+        </label>
+        <div class="document-info"></div>
+    </div>
+
+    <!-- Akta Kelahiran -->
+    <div class="document-item" id="akta-container">
+        <label class="upload-label">
+            <i class="fas fa-certificate upload-icon"></i>
+            <h3>Akta Kelahiran</h3>
+            <p>PDF atau Gambar</p>
+            <input type="file" name="akta_kelahiran" class="upload-input" accept=".pdf,.jpg,.jpeg,.png" onchange="previewDocument(this, 'akta-container')">
+        </label>
+        <div class="document-info"></div>
+    </div>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-cloud-upload-alt"></i> Upload Dokumen
+                    </button>
+                </form>
+            </div>
+            {% endif %}
         </div>
     </div>
-{% if pendaftarans and pendaftarans[0].status == 'approved' %}
-<div class="document-section">
-    <h2><i class="fas fa-file-upload"></i> Upload Dokumen</h2>
-    <p class="mb-4">Silakan upload dokumen yang diperlukan di bawah ini:</p>
-    
-    <form method="POST" action="{{ url_for('main_bp.upload_documents') }}" enctype="multipart/form-data">
-        <div class="document-grid">
-            <!-- Ijazah/SKL -->
-            <div class="document-item" id="ijazah-container">
-                <label class="upload-label">
-                    <div class="upload-icon">
-                        <i class="fas fa-file-pdf"></i>
-                    </div>
-                    <h3>Ijazah/SKL</h3>
-                    <p>Upload file PDF atau gambar</p>
-                    <input type="file" name="ijazah" class="upload-input" 
-                           accept=".pdf,.jpg,.jpeg,.png" 
-                           onchange="previewDocument(this, 'ijazah-container')">
-                </label>
-                <div class="document-info"></div>
-            </div>
-
-            <!-- Kartu Keluarga -->
-            <div class="document-item" id="kk-container">
-                <label class="upload-label">
-                    <div class="upload-icon">
-                        <i class="fas fa-file-pdf"></i>
-                    </div>
-                    <h3>Kartu Keluarga</h3>
-                    <p>Upload file PDF atau gambar</p>
-                    <input type="file" name="kartu_keluarga" class="upload-input" 
-                           accept=".pdf,.jpg,.jpeg,.png"
-                           onchange="previewDocument(this, 'kk-container')">
-                </label>
-                <div class="document-info"></div>
-            </div>
-
-            <!-- Akta Kelahiran -->
-            <div class="document-item" id="akta-container">
-                <label class="upload-label">
-                    <div class="upload-icon">
-                        <i class="fas fa-file-pdf"></i>
-                    </div>
-                    <h3>Akta Kelahiran</h3>
-                    <p>Upload file PDF atau gambar</p>
-                    <input type="file" name="akta_kelahiran" class="upload-input" 
-                           accept=".pdf,.jpg,.jpeg,.png"
-                           onchange="previewDocument(this, 'akta-container')">
-                </label>
-                <div class="document-info"></div>
-            </div>
-
-            <!-- Foto -->
-            <div class="document-item" id="foto-container">
-                <label class="upload-label">
-                    <div class="upload-icon">
-                        <i class="fas fa-image"></i>
-                    </div>
-                    <h3>Pas Foto 3x4</h3>
-                    <p>Upload file gambar</p>
-                    <input type="file" name="foto" class="upload-input" 
-                           accept=".jpg,.jpeg,.png"
-                           onchange="previewDocument(this, 'foto-container')">
-                </label>
-                <div class="document-info"></div>
-            </div>
-        </div>
-
-        <button type="submit" class="submit-btn" style="margin-top: 2rem;">
-            <i class="fas fa-cloud-upload-alt"></i> Upload Semua Dokumen
-        </button>
-    </form>
-</div>
-{% endif %}
-<style>
-    /* Update document section styles */
-    .document-section {
-        background: white;
-        border-radius: 12px;
-        padding: 1.5rem;  /* Reduced padding */
-        margin: 1rem;    /* Reduced margin */
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .document-section h2 {
-        font-size: 1.2rem;  /* Smaller heading */
-        margin-bottom: 0.5rem;
-    }
-
-    .document-section p {
-        font-size: 0.85rem;  /* Smaller text */
-        margin-bottom: 0.8rem;
-    }
-
-    .document-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Smaller minimum width */
-        gap: 0.8rem;  /* Reduced gap */
-    }
-
-    .document-item {
-        padding: 1rem;  /* Reduced padding */
-        border-radius: 8px;
-        border: 1px dashed #ddd;  /* Thinner border */
-    }
-
-    .upload-label {
-        display: block;
-        cursor: pointer;
-        text-align: center;
-    }
-
-    .upload-icon {
-        font-size: 1.5rem;  /* Smaller icon */
-        margin-bottom: 0.5rem;
-    }
-
-    .upload-label h3 {
-        font-size: 0.9rem;  /* Smaller heading */
-        margin: 0.3rem 0;
-    }
-
-    .upload-label p {
-        font-size: 0.75rem;  /* Smaller text */
-        color: #666;
-    }
-
-    .document-info {
-        margin-top: 0.8rem;
-        font-size: 0.8rem;
-    }
-
-    .document-preview {
-        max-width: 100%;
-        max-height: 120px;  /* Limit preview height */
-        margin-top: 0.8rem;
-    }
-
-    .document-status {
-        padding: 0.3rem 0.8rem;
-        border-radius: 15px;
-        font-size: 0.8rem;
-        margin-top: 0.5rem;
-    }
-
-    /* Make upload button smaller */
-    .document-section .submit-btn {
-        margin-top: 1rem;
-        padding: 0.6rem 1.2rem;
-        font-size: 0.9rem;
-    }
-</style>
 <!-- Add this JavaScript before closing body tag -->
 <script>
 function previewDocument(input, containerId) {
@@ -848,7 +476,7 @@ function previewDocument(input, containerId) {
 
     if (file) {
         const fileName = file.name;
-        const fileSize = (file.size / 1024 / 1024).toFixed(2); // Convert to MB
+        const fileSize = (file.size / 1024 / 1024).toFixed(2);
         
         container.classList.add('uploaded');
         infoDiv.innerHTML = `
@@ -859,26 +487,48 @@ function previewDocument(input, containerId) {
             <p><strong>Ukuran:</strong> ${fileSize} MB</p>
         `;
 
-        // If it's an image, show preview
         if (file.type.startsWith('image/')) {
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = document.createElement('img');
                 img.src = e.target.result;
                 img.className = 'document-preview';
-                
-                // Remove existing preview if any
-                const existingPreview = container.querySelector('.document-preview');
-                if (existingPreview) {
-                    existingPreview.remove();
-                }
-                
                 container.appendChild(img);
             }
             reader.readAsDataURL(file);
+        } else {
+            const fileIcon = document.createElement('i');
+            fileIcon.className = 'fas fa-file-upload';
+            container.appendChild(fileIcon);
+        }
+    } else {
+        container.classList.remove('uploaded');
+        infoDiv.innerHTML = '';
+        const existingImg = container.querySelector('img.document-preview');
+        if (existingImg) {
+            existingImg.remove();
         }
     }
 }
+
+// Initialize preview for existing documents
+document.querySelectorAll('.document-item').forEach(item => {
+    const input = item.querySelector('input[type="file"]');
+    if (input && input.files.length > 0) {
+        previewDocument(input, item.id);
+    }
+});
+
+document.querySelector('form').addEventListener('submit', function(e) {
+    const nisn = document.querySelector('input[name="nisn"]').value;
+    
+    // Validate NISN format
+    if (!/^\d{10}$/.test(nisn)) {
+        e.preventDefault();
+        alert('NISN harus berupa 10 digit angka');
+        return false;
+    }
+});
 </script>
 </body>
 </html>
