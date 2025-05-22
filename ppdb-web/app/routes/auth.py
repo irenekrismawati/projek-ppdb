@@ -48,19 +48,6 @@ def login():
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        nisn = request.form.get('nisn')
-    
-        # Validate NISN
-        if not nisn or len(nisn) != 10 or not nisn.isdigit():
-            flash('NISN harus 10 digit angka', 'error')
-            return redirect(url_for('auth_bp.register'))
-        
-        # Check if NISN already exists
-        existing_nisn = Pendaftaran.query.filter_by(nisn=nisn).first()
-        if existing_nisn:
-            flash('NISN sudah terdaftar', 'error')
-            return redirect(url_for('auth_bp.register'))
-        
         try:
             # Get form data
             username = request.form.get('username')
@@ -77,18 +64,6 @@ def register():
                 role='user'
             )
             db.session.add(user)
-            db.session.flush()  # Get user.id
-
-            # Create pendaftaran
-            pendaftaran = Pendaftaran(
-                user_id=user.id,
-                nama=name,  # Use the same name from user registration
-                nisn=nisn,  # Will be filled later in the daftar form
-                asal_sekolah='',  # Will be filled later in the daftar form
-                pilihan_jurusan='',  # Will be filled later in the daftar form
-                status='pending'
-            )
-            db.session.add(pendaftaran)
             db.session.commit()
 
             flash('Registrasi berhasil! Silakan login.', 'success')
