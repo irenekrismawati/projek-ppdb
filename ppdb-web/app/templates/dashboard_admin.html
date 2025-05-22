@@ -166,6 +166,87 @@
             font-size: 0.9rem;
         }
 
+        /* Search and Filter Styles */
+        .controls-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--white);
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            padding: 0.5rem;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        .search-box i {
+            color: var(--primary-color);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .filter-btn-all {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        .filter-btn-pending {
+            background: var(--warning-color);
+            color: var(--white);
+        }
+
+        .filter-btn-approved {
+            background: var(--success-color);
+            color: var(--white);
+        }
+
+        .filter-btn-rejected {
+            background: var(--danger-color);
+            color: var(--white);
+        }
+
+        .filter-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
         @media (max-width: 768px) {
             .wrapper {
                 flex-direction: column;
@@ -236,6 +317,28 @@
                 </div>
             </div>
 
+            <!-- Search and Filter -->
+            <div class="controls-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Cari nama siswa...">
+                </div>
+                <div class="filter-buttons">
+                    <button class="filter-btn filter-btn-all active" data-status="all">
+                        <i class="fas fa-list"></i> Semua
+                    </button>
+                    <button class="filter-btn filter-btn-pending" data-status="pending">
+                        <i class="fas fa-clock"></i> Menunggu
+                    </button>
+                    <button class="filter-btn filter-btn-approved" data-status="approved">
+                        <i class="fas fa-check-circle"></i> Diterima
+                    </button>
+                    <button class="filter-btn filter-btn-rejected" data-status="rejected">
+                        <i class="fas fa-times-circle"></i> Ditolak
+                    </button>
+                </div>
+            </div>
+
             <!-- Table -->
             <div class="table-container">
                 <h2><i class="fas fa-list"></i> Daftar Pendaftaran</h2>
@@ -284,5 +387,46 @@
             </div>
         </div>
     </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const tableRows = document.querySelectorAll('tbody tr');
+    
+    // Search functionality
+    searchInput.addEventListener('input', filterTable);
+    
+    // Filter buttons functionality
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Remove active class from all buttons
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            // Add active class to clicked button
+            this.classList.add('active');
+            filterTable();
+        });
+    });
+    
+    function filterTable() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const activeFilter = document.querySelector('.filter-btn.active').dataset.status;
+        
+        tableRows.forEach(row => {
+            const name = row.cells[0].textContent.toLowerCase();
+            const status = row.cells[4].textContent.trim().toLowerCase();
+            
+            const matchesSearch = name.includes(searchTerm);
+            const matchesFilter = activeFilter === 'all' || status === activeFilter;
+            
+            if (matchesSearch && matchesFilter) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+});
+</script>
 </body>
 </html>
