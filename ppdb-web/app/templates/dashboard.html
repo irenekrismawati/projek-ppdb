@@ -343,6 +343,95 @@
             border-left: 4px solid var(--warning);
         }
 
+        /* Payment Styles */
+        .payment-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .payment-section h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .payment-info {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .payment-amount {
+            text-align: center;
+            padding: 2rem;
+            background: var(--light);
+            border-radius: 8px;
+        }
+
+        .payment-amount .amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 1rem 0;
+        }
+
+        .payment-methods {
+            display: grid;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .payment-method {
+            padding: 1.5rem;
+            background: var(--light);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .payment-method i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .bank-details {
+            color: var(--dark);
+            font-size: 0.9rem;
+            margin: 0.25rem 0;
+        }
+
+        .payment-instructions {
+            margin: 2rem 0;
+        }
+
+        .payment-instructions ol {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .payment-instructions li {
+            margin: 0.5rem 0;
+            color: var(--dark);
+        }
+
+        .payment-form {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+        }
+
+        .file-hint {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .sidebar {
@@ -691,43 +780,7 @@
                 {% endif %}
             {% endfor %}
 
-            <!-- Data Table -->
-            {% if pendaftarans %}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nama</th>
-                        <th>NISN</th>
-                        <th>Jurusan</th>
-                        <th>Status</th>
-                        <th>Tanggal Daftar</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for p in pendaftarans %}
-                    <tr>
-                        <td>{{ p.nama }}</td>
-                        <td>{{ p.nisn }}</td>
-                        <td>{{ p.pilihan_jurusan }}</td>
-                        <td class="status-{{ p.status }}">
-                            <i class="fas fa-{% if p.status == 'approved' %}check-circle{% elif p.status == 'rejected' %}times-circle{% else %}clock{% endif %}"></i>
-                            {{ p.status }}
-                        </td>
-                        <td>{{ p.tanggal_daftar.strftime('%d-%m-%Y') }}</td>
-                        <td>
-                            <a href="#" class="detail-btn">
-                                <i class="fas fa-eye"></i> Detail
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-            <p>Belum ada pendaftaran.</p>
-            {% endif %}
-
+            <!-- Add this code block for payment section -->
             {% if pendaftarans and pendaftarans[0].status == 'approved' %}
             <div class="document-section">
                 <h2><i class="fas fa-file-upload"></i> Upload Dokumen</h2>
@@ -772,6 +825,64 @@
                         <i class="fas fa-cloud-upload-alt"></i> Upload Dokumen
                     </button>
                 </form>
+            </div>
+            {% endif %}
+
+            <!-- Add this after the notification-approved div -->
+            {% if p.status == 'approved' and not p.payment_status %}
+            <div class="payment-section">
+                <h3><i class="fas fa-money-bill"></i> Pembayaran PPDB</h3>
+                <div class="payment-info">
+                    <div class="payment-amount">
+                        <h4>Total Pembayaran</h4>
+                        <p class="amount">Rp 500.000</p>
+                    </div>
+                    <div class="payment-details">
+                        <h4>Metode Pembayaran</h4>
+                        <div class="payment-methods">
+                            <div class="payment-method">
+                                <i class="fas fa-university"></i>
+                                <p>Transfer Bank</p>
+                                <p class="bank-details">Bank BRI: 1234-5678-9012-3456</p>
+                                <p class="bank-details">a.n. SMA Negeri 1 Contoh</p>
+                            </div>
+                        </div>
+                        <div class="payment-instructions">
+                            <h4>Cara Pembayaran:</h4>
+                            <ol>
+                                <li>Transfer sesuai nominal ke rekening di atas</li>
+                                <li>Upload bukti pembayaran pada form di bawah</li>
+                                <li>Tunggu verifikasi dari admin (1x24 jam)</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <form method="POST" action="{{ url_for('main_bp.submit_payment') }}" enctype="multipart/form-data" class="payment-form">
+                        <div class="form-group">
+                            <label>Upload Bukti Pembayaran</label>
+                            <input type="file" name="payment_proof" accept=".jpg,.jpeg,.png,.pdf" required>
+                            <p class="file-hint">Format: JPG, PNG, atau PDF (Max 2MB)</p>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-upload"></i> Upload Bukti Pembayaran
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% elif p.status == 'approved' and p.payment_status == 'pending' %}
+            <div class="notification notification-warning">
+                <i class="fas fa-clock"></i>
+                <div>
+                    <h3>Pembayaran Sedang Diverifikasi</h3>
+                    <p>Bukti pembayaran Anda sedang dalam proses verifikasi. Mohon tunggu konfirmasi dari admin.</p>
+                </div>
+            </div>
+            {% elif p.status == 'approved' and p.payment_status == 'verified' %}
+            <div class="notification notification-success">
+                <i class="fas fa-check-circle"></i>
+                <div>
+                    <h3>Pembayaran Berhasil</h3>
+                    <p>Pembayaran Anda telah dikonfirmasi. Silakan melanjutkan proses pendaftaran.</p>
+                </div>
             </div>
             {% endif %}
         </div>

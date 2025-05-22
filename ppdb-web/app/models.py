@@ -49,6 +49,11 @@ class Pendaftaran(db.Model):
     pilihan_jurusan = db.Column(db.String(50), nullable=False)
     status = db.Column(db.String(20), default='pending')
     tanggal_daftar = db.Column(db.DateTime, default=datetime.utcnow)
+    # Tambahkan kolom pembayaran
+    payment_status = db.Column(db.String(20), nullable=True)
+    payment_proof = db.Column(db.String(255), nullable=True)
+    payment_date = db.Column(db.DateTime, nullable=True)
+    payment_amount = db.Column(db.Integer, default=500000)
 
 class Sekolah(db.Model):
     __tablename__ = 'sekolah'

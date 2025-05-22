@@ -7,8 +7,11 @@ from datetime import datetime
 
 main_bp = Blueprint('main_bp', __name__)
 
-def allowed_file(filename, allowed_extensions):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_extensions
+UPLOAD_FOLDER = 'app/static/uploads/payments'
+ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @main_bp.route('/')
 def index():
@@ -100,4 +103,48 @@ def upload_documents():
             
         return redirect(url_for('main_bp.dashboard'))
 
+    return redirect(url_for('main_bp.dashboard'))
+
+@main_bp.route('/submit-payment', methods=['POST'])
+@login_required
+def submit_payment():
+    if 'payment_proof' not in request.files:
+        flash('Tidak ada file yang dipilih', 'error')
+        return redirect(url_for('main_bp.dashboard'))
+        
+    file = request.files['payment_proof']
+    
+    if file.filename == '':
+        flash('Tidak ada file yang dipilih', 'error')
+        return redirect(url_for('main_bp.dashboard'))
+        
+    if file and allowed_file(file.filename):
+        try:
+            # Create upload directory if it doesn't exist
+            os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+            
+            # Generate secure filename with timestamp
+            filename = secure_filename(f"payment_{current_user.id}_{int(datetime.now().timestamp())}{os.path.splitext(file.filename)[1]}")
+            file_path = os.path.join(UPLOAD_FOLDER, filename)
+            
+            # Save file
+            file.save(file_path)
+            
+            # Update payment status
+            pendaftaran = Pendaftaran.query.filter_by(user_id=current_user.id).first()
+            pendaftaran.payment_status = 'pending'
+            pendaftaran.payment_proof = filename
+            pendaftaran.payment_date = datetime.now()
+            
+            db.session.commit()
+            
+            flash('Bukti pembayaran berhasil diunggah. Mohon tunggu verifikasi admin.', 'success')
+            
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Terjadi kesalahan: {str(e)}', 'error')
+            
+        return redirect(url_for('main_bp.dashboard'))
+    
+    flash('Format file tidak didukung', 'error')
     return redirect(url_for('main_bp.dashboard'))
