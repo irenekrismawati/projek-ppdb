@@ -49,21 +49,19 @@ class Pendaftaran(db.Model):
     pilihan_jurusan = db.Column(db.String(50), nullable=False)
     status = db.Column(db.String(20), default='pending')
     tanggal_daftar = db.Column(db.DateTime, default=datetime.utcnow)
-    # Tambahkan kolom pembayaran
-    payment_status = db.Column(db.String(20), nullable=True)
-    payment_proof = db.Column(db.String(255), nullable=True)
-    payment_date = db.Column(db.DateTime, nullable=True)
-    payment_amount = db.Column(db.Integer, default=500000)
-
+    
 class Sekolah(db.Model):
     __tablename__ = 'sekolah'
-    id = db.Column(db.Integer, primary_key=True)
+    
+    id = db.Column(db.Integer, primary_key=True)  # Add primary key
     nama = db.Column(db.String(100), nullable=False)
-    alamat = db.Column(db.String(200), nullable=False)
-    akreditasi = db.Column(db.String(1))
-    kepala_sekolah = db.Column(db.String(100))
-    email = db.Column(db.String(120))
-    telepon = db.Column(db.String(20))
+    npsn = db.Column(db.String(10), unique=True)
+    alamat = db.Column(db.Text)
+    kota = db.Column(db.String(50))
+    provinsi = db.Column(db.String(50))
+    status = db.Column(db.String(20))  # negeri/swasta
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 class PaymentRequest(db.Model):
     __tablename__ = 'payment_requests'
