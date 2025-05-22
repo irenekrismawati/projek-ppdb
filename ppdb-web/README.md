@@ -1,178 +1,85 @@
-# Sistem PPDB Online SMK KARYA BANGSA SINTANG
+# PPDB Online SMK KARYA BANGSA SINTANG
 
-Sistem Penerimaan Peserta Didik Baru (PPDB) Online menggunakan Python Flask untuk SMK KARYA BANGSA SINTANG.
+## Overview
+Sistem Penerimaan Peserta Didik Baru (PPDB) Online untuk SMK KARYA BANGSA SINTANG. Aplikasi berbasis web menggunakan Python Flask untuk manajemen penerimaan siswa baru.
 
-## Fitur Utama
+## Kebutuhan Sistem
+- Python 3.8+
+- Flask 2.0+
+- SQLite3
+- Web browser modern (Chrome, Firefox, Edge)
+- Koneksi internet untuk CDN
 
-- Pendaftaran dan login user dengan validasi
-- Form pendaftaran siswa baru dengan data lengkap:
-  - Data Pribadi
-  - Data Alamat
-  - Data Orang Tua
-  - Data Sekolah Asal
-  - Pilihan Jurusan
-- Upload dokumen persyaratan:
-  - Ijazah
-  - Kartu Keluarga
-  - Akta Kelahiran
-- Pembayaran biaya pendaftaran:
-  - Transfer Bank
-  - Verifikasi bukti pembayaran
-- Panel admin untuk:
-  - Verifikasi pendaftaran siswa
-  - Filter status (Menunggu/Diterima/Ditolak)
-  - Pencarian siswa
-  - Statistik pendaftaran
-- Status tracking pendaftaran
-- Notifikasi status untuk setiap tahapan
-
-## Struktur Proyek
-
-```
-ppdb-web/
-├── app/
-│   ├── __init__.py          # Inisialisasi aplikasi Flask
-│   ├── models.py            # Model database
-│   ├── routes/
-│   │   ├── main.py         # Route utama
-│   │   ├── auth.py         # Route autentikasi
-│   │   └── admin.py        # Route admin
-│   └── templates/
-│       ├── dashboard.html
-│       ├── dashboard_admin.html
-│       ├── index.html
-│       ├── login.html
-│       └── register.html
-├── instance/
-│   └── database.db
-├── static/
-│   └── uploads/
-│       ├── documents/      # Upload ijazah, KK, akta
-│       └── payments/       # Upload bukti pembayaran
-├── migrations/            # Database migrations
-├── requirements.txt
-└── run.py
-```
-
-## Teknologi yang Digunakan
-
-- **Backend:**
-  - Python 3.8+
-  - Flask Web Framework
-  - SQLAlchemy ORM
-  - Flask-Login
-  - Flask-Migrate
-  - SQLite Database
-
-- **Frontend:**
-  - HTML5
-  - CSS3 (Custom styling)
-  - JavaScript (Vanilla JS)
-  - Font Awesome Icons
-  - Mobile Responsive Design
-
-## Instalasi
-
-1. Clone repository:
+## Quick Start
+1. Install Python 3.8 atau lebih baru
+2. Clone repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/username/ppdb-web.git
 cd ppdb-web
 ```
 
-2. Buat virtual environment:
+3. Buat virtual environment:
 ```bash
 python -m venv venv
 venv\Scripts\activate
 ```
 
-3. Install dependencies:
+4. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Setup database:
+5. Jalankan aplikasi:
 ```bash
 python run.py
 ```
 
-## Menjalankan Aplikasi
+## Dokumentasi
+- [User Manual](docs/USER_MANUAL.md)
+- [Changelog](docs/CHANGELOG.md)
 
-1. Aktifkan virtual environment:
-```bash
-venv\Scripts\activate
-```
+## Fitur
+- Multi-user (Admin/Siswa)
+- Form pendaftaran lengkap
+- Upload dokumen
+- Verifikasi pembayaran
+- Dashboard admin
+- Statistik pendaftaran
 
-2. Jalankan server:
-```bash
-python run.py
-```
-
-3. Buka browser:
-```
-http://localhost:3000
-```
-
-## Alur Pendaftaran PPDB
-
-1. **Pendaftaran Akun**
-   - Register akun baru
-   - Login ke sistem
-
-2. **Pengisian Formulir**
-   - Isi data pribadi
-   - Isi data alamat
-   - Isi data orang tua
-   - Isi data sekolah asal
-   - Pilih jurusan
-
-3. **Verifikasi Admin**
-   - Admin memeriksa data
-   - Admin menyetujui/menolak
-
-4. **Upload Dokumen** (jika diterima)
-   - Upload ijazah
-   - Upload kartu keluarga
-   - Upload akta kelahiran
-
-5. **Pembayaran**
-   - Transfer biaya pendaftaran
-   - Upload bukti pembayaran
-   - Verifikasi pembayaran oleh admin
-
-## Akun Default
-
-```
-Admin:
-Username: admin
-Password: admin123
-```
-
-## Jurusan yang Tersedia
-
-- Rekayasa Perangkat Lunak (RPL)
-- Perhotelan (PH)
-- Teknik Sepeda Motor (TSM)
-
-## Persyaratan Sistem
-
-- Python 3.8+
-- SQLite 3
-- Web Browser Modern (Chrome/Firefox/Edge)
-- Koneksi Internet (CDN resources)
-- Ruang Penyimpanan untuk Upload Files
-
-## Pengembangan
-
-Projek ini masih dalam pengembangan aktif. Beberapa fitur yang akan datang:
-- Sistem notifikasi email
-- Dashboard statistik yang lebih detail
-- Export data ke Excel/PDF
-- Integrasi pembayaran online
+## Tech Stack
+- Backend: Python/Flask
+- Database: SQLite
+- Frontend: HTML5/CSS3/JS
+- UI: Font Awesome
 
 ## Lisensi
-
-MIT License - Silakan gunakan dan modifikasi sesuai kebutuhan.
+MIT License
 
 ## Author
+SMK KARYA BANGSA SINTANG
 
-Dibuat untuk SMK KARYA BANGSA SINTANG
+## Screenshots Aplikasi
+
+### Halaman Login & Registrasi
+![Login Screen](../foto%20projek/Screenshot%202025-05-22%20124949.png)
+![Register Screen](../foto%20projek/Screenshot%202025-05-22%20125003.png)
+
+### Dashboard Siswa
+![Dashboard Overview](../foto%20projek/Screenshot%202025-05-22%20125021.png)
+![Form Pendaftaran](../foto%20projek/Screenshot%202025-05-22%20125031.png)
+![Upload Documents](../foto%20projek/Screenshot%202025-05-22%20125055.png)
+
+### Pembayaran
+![Payment Section](../foto%20projek/Screenshot%202025-05-22%20125117.png)
+![Payment Verification](../foto%20projek/Screenshot%202025-05-22%20125136.png)
+
+### Dashboard Admin
+![Admin Overview](../foto%20projek/Screenshot%202025-05-22%20125446.png)
+![Pendaftar Management](../foto%20projek/Screenshot%202025-05-22%20125458.png)
+![Document Verification](../foto%20projek/Screenshot%202025-05-22%20125541.png)
+![Payment Management](../foto%20projek/Screenshot%202025-05-22%20125556.png)
+
+### Statistik & Laporan
+![Statistics Dashboard](../foto%20projek/Screenshot%202025-05-22%20125603.png)
+![Reports Generation](../foto%20projek/Screenshot%202025-05-22%20125722.png)
+![Data Export](../foto%20projek/Screenshot%202025-05-22%20125756.png)
