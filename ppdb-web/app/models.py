@@ -25,12 +25,28 @@ class User(UserMixin, db.Model):
 
 class Pendaftaran(db.Model):
     __tablename__ = 'pendaftaran'
+    
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     nama = db.Column(db.String(100), nullable=False)
-    nisn = db.Column(db.String(20), unique=True, nullable=False)
-    asal_sekolah = db.Column(db.String(100))
-    pilihan_jurusan = db.Column(db.String(50))
+    nisn = db.Column(db.String(10), nullable=False, unique=True)
+    tempat_lahir = db.Column(db.String(50), nullable=False) 
+    tanggal_lahir = db.Column(db.Date, nullable=False)
+    jenis_kelamin = db.Column(db.String(1), nullable=False)
+    agama = db.Column(db.String(20), nullable=False)
+    alamat = db.Column(db.Text, nullable=False)  # Tambahkan kolom alamat
+    rt_rw = db.Column(db.String(10))
+    no_hp = db.Column(db.String(15), nullable=False)
+    email = db.Column(db.String(120))
+    nama_ayah = db.Column(db.String(100), nullable=False)
+    agama_ayah = db.Column(db.String(20), nullable=False)
+    pekerjaan_ayah = db.Column(db.String(50), nullable=False)
+    nama_ibu = db.Column(db.String(100), nullable=False)
+    agama_ibu = db.Column(db.String(20), nullable=False)
+    pekerjaan_ibu = db.Column(db.String(50), nullable=False)
+    asal_sekolah = db.Column(db.String(100), nullable=False)
+    npsn_sekolah = db.Column(db.String(10))
+    pilihan_jurusan = db.Column(db.String(50), nullable=False)
     status = db.Column(db.String(20), default='pending')
     tanggal_daftar = db.Column(db.DateTime, default=datetime.utcnow)
 

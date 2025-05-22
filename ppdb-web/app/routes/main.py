@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from app.models import db, User, Pendaftaran, PaymentRequest
 from werkzeug.utils import secure_filename
 import os
+from datetime import datetime
 
 main_bp = Blueprint('main_bp', __name__)
 
@@ -19,34 +20,41 @@ from sqlalchemy.exc import IntegrityError
 @main_bp.route('/daftar', methods=['POST'])
 @login_required
 def daftar():
-    nisn = request.form.get('nisn')
-    
-    # Check if NISN already exists
-    existing_registration = Pendaftaran.query.filter_by(nisn=nisn).first()
-    if existing_registration:
-        flash('NISN sudah terdaftar dalam sistem. Mohon periksa kembali NISN Anda.', 'error')
-        return redirect(url_for('main_bp.dashboard'))
-
-    try:
-        pendaftaran = Pendaftaran(
-            nama=request.form.get('nama'),
-            nisn=nisn,
-            asal_sekolah=request.form.get('asal_sekolah'),
-            alamat=request.form.get('alamat'),
-            no_hp=request.form.get('no_hp'),
-            pilihan_jurusan=request.form.get('pilihan_jurusan'),
-            status='pending',
-            user_id=current_user.id
-        )
-        db.session.add(pendaftaran)
-        db.session.commit()
-        flash('Pendaftaran berhasil dikirim!', 'success')
-    except IntegrityError:
-        db.session.rollback()
-        flash('Error: NISN sudah terdaftar', 'error')
-    
-    return redirect(url_for('main_bp.dashboard'))
-    return render_template('daftar.html')
+    if request.method == 'POST':
+        try:
+            pendaftaran = Pendaftaran(
+                user_id=current_user.id,
+                nama=request.form['nama'],
+                nisn=request.form['nisn'],
+                tempat_lahir=request.form['tempat_lahir'],
+                tanggal_lahir=datetime.strptime(request.form['tanggal_lahir'], '%Y-%m-%d'),
+                jenis_kelamin=request.form['jenis_kelamin'],
+                agama=request.form['agama'],
+                alamat=request.form['alamat'],  # Pastikan field ini ada
+                rt_rw=request.form['rt_rw'],
+                no_hp=request.form['no_hp'],
+                email=request.form['email'],
+                nama_ayah=request.form['nama_ayah'],
+                agama_ayah=request.form['agama_ayah'],
+                pekerjaan_ayah=request.form['pekerjaan_ayah'],
+                nama_ibu=request.form['nama_ibu'],
+                agama_ibu=request.form['agama_ibu'],
+                pekerjaan_ibu=request.form['pekerjaan_ibu'],
+                asal_sekolah=request.form['asal_sekolah'],
+                npsn_sekolah=request.form['npsn_sekolah'],
+                pilihan_jurusan=request.form['pilihan_jurusan']
+            )
+            
+            db.session.add(pendaftaran)
+            db.session.commit()
+            
+            flash('Pendaftaran berhasil!', 'success')
+            return redirect(url_for('main_bp.dashboard'))
+            
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Terjadi kesalahan: {str(e)}', 'error')
+            return redirect(url_for('main_bp.daftar'))
 
 @main_bp.route('/dashboard')
 @login_required
